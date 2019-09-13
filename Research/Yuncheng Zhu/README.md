@@ -13,7 +13,7 @@ Google Photos for Audio will be a full-stack project. The <strong>minimum viable
 * Automate the creation of various cloud resources using an infrastructure-as-code framework like Terraform.
 
 ### The features of Google Photo:  
-Since our project is similar to Google Photos, we list some functions and features of it.  
+Since Google Photos is similar to our projec, we list some functions and features of it.  
 * Upload photos is available by dragging or clicking on upload button.  
 * Default albums are devided by photos' theme: people, places, things... and also in media's type: Videos, Movies.  
 And of course users can create new albums with whatever names they want.
