@@ -4,9 +4,9 @@ Google Photos for Audio will be a full-stack project. The <strong>minimum viable
 * Users can upload media files in the front-end
 * Users can search for media using words found in their audio content.  
 ### High-Level architecture and goals:
-* Store the media files in cloud platform (GCP/AWS)
-* Use a GCP Cloud Function or AWS Lambda or k8s to watch for the pubsub topic and process the uploaded file to translate
- audio to text, using GCP Cloud Speech-to-text or AWS Transcribe service.
+* Upload the media files in object storage service like Google Cloud Storage (GCS) or S3.
+* An upload event will be pushed to a GCP or AWS Pub/Sub topic, or a self-deployed Kafka instance for the extra challenge.
+* Use a GCP Cloud Function or AWS Lambda or k8s(if ambitious) to watch for the pubsub topic and process the uploaded file to translate audio to text, using GCP Cloud Speech-to-text or AWS Transcribe service.
 * Store the analysis result into a database, queryable by our website.
 * The site can run on either a Virtual Machine (VM) or as a K8s service.  
 ### Strech Goal:
