@@ -25,11 +25,11 @@ Google Photos for Audio will be a full-stack project. The <strong>minimum viable
 The diagram of whole project's structure is as followed.
 ![diagram](diagram.png)
 ### Design Implications and Discussion
-* Why we choose AWS not GCP:
+* Why we choose AWS not GCP  
 Actually they are pretty similar and brand new for most of us. Both have strong function on cloud and database. After do some research we found that AWS have some more understandable tutorials to followed and perhaps have a larger user group, so we choose AWS instead of GCP.
-* Why DynamoDB not MongoDB
+* Why DynamoDB not MongoDB  
 Both of them are NoSQL databases. DynamoDB is popular in the gaming industry as well as in the internet of things (IoT) industry. One fearure of DynamoDB is that you can’t have embedded data structures like you can with MongoDB. But Since we've already decided to use the AWS stack and we need a NoSQL database, then DynamoDB is a no-brainer.
-* Front-end part
+* Front-end part  
 We decide to use NodeJS to implement our website. So the NodeJS is a convenient tool to write javascript code on server side. And for now, Node is definetely the hippest, the trendiest IT technology for people to learning right now, this project is a good oppotunity to learn it.
 ## 5. Acceptance criteria
 * Minimum acceptance criteria is a website which support upload media files and search by words operations.
