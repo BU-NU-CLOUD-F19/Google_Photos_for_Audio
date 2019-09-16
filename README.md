@@ -11,7 +11,8 @@ High-level goals including:
 * Utilizing AWS services like AWS S3, Lambda, Transcribe Service, DynamoDB, Comprehend for cloud platform, storage, audio/video-to-text translation, text analysis, etc. functions.
 
 ## 2. Users/Personas Of The Project
-Google Photos for Audio will be used by people who want to store and organize audio/video files in a user-searchable manner on the cloud. These people include journalists, academic researchers, and reporters who need to be able to search through the files with keywords.
+* Google Photos for Audio will be used by people who want to store and organize audio/video files in a user-searchable manner on the cloud. 
+* These people include journalists, academic researchers, and reporters who need to be able to search through the files with keywords.
 
 ## 3. Scope and Features Of The Project
 This project provides basic functionality of a site like Google Photos but for audio clips. Below is an overview of the program features from the perspective of the program architecture.
