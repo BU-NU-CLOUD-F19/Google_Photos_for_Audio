@@ -16,12 +16,20 @@ Google Photos for Audio will be used by people who want to store and organize au
 ## 3. Scope and Features Of The Project
 
 ## 4. Solution Concept
-A high-level architecture of the project:
+### High-Level architecture and goals:
+* Upload the media files in S3, an object storage service.
+* An upload event will be pushed to AWS Pub/Sub topic.
+* Use AWS Lambda to watch for the pubsub topic and process the uploaded file to translate audio to text, using AWS Transcribe service.
+* Store the analysis result into a database, queryable by our website.
+* The site can run on either a Virtual Machine (VM) or as a K8s service.
+The diagram of whole project's structure is as followed.
 ![Image text](https://github.com/MengtingSong/Google_Photos_for_Audio/blob/master/architecture.png)
-
-
 ## 5. Acceptance criteria
-
+* Minimum acceptance criteria is a website which support upload media files and search by words operations.
+* Stretch Goal:
+    * Automate the creation of various cloud resources using an infrastructure-as-code framework like Terraform.
+    * Use k8s to watch for the pubsub topic and process the uploaded file to translate audio to text.
+    * Use a self-deployed kafka to better the message stream process.
 ## 6. Release Planning
 1. Release #1 (due by Week 5): 
 
