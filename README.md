@@ -48,7 +48,7 @@ This project is not a social media platform where uploaded content is shared to 
 * An upload event will be pushed to AWS Pub/Sub topic.
 * Use AWS Lambda to watch for the pubsub topic and process the uploaded file to translate audio to text, using AWS Transcribe service.
 * Store the analysis result into a database, queryable by our website.
-* The site can run on either a Virtual Machine (VM) or as a K8s service.
+* The site can run on either a Virtual Machine (VM) or as a K8s service.  
 The diagram of whole project's structure is as followed.
 ![Image text](https://github.com/MengtingSong/Google_Photos_for_Audio/blob/master/architecture.png)
 ## 5. Acceptance criteria
