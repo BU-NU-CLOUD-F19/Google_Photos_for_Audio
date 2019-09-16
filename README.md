@@ -23,7 +23,7 @@ A high-level architecture of the Project:
 ## 5. Acceptance criteria
 
 ## 6. Release Planning
-Release #1 (due by Week 5): 
+1. Release #1 (due by Week 5): 
 
 Overall structure and interfaces establishment, and user register/login module completion, integrating with Amazon S3 and DynamoDB: 
 * Establish the structure of the overall system and respective module including:
@@ -38,14 +38,14 @@ Overall structure and interfaces establishment, and user register/login module c
 * Test
   * Write dummy code to test overall structure and module interfaces
 
-Release #2 (due by Week 7): 
+2. Release #2 (due by Week 7): 
 
 Audio File Management module completion, integrating with Amazon S3, AWS DynamoDB:
 * Identify audio file data structure (audio title, audio, uploaded time, transcription status, ...)
 * Realize audio file uploading/storing, downloading/retrieve, deletion, search by title/time, ...
 * Test
 
-Release #3 (due by Week 9): 
+3. Release #3 (due by Week 9): 
 
 Audio File Transacription module completion, integrating with AWS Lambda, AWS Comprehend and AWS DynamoDB:
 * Update audio file data structure (audio pointer, raw transcription, keywords, ...) 
@@ -53,7 +53,7 @@ Audio File Transacription module completion, integrating with AWS Lambda, AWS Co
 * Realize audio file transcription and keywords storing, retrieve, deletion, update, search, ...
 * Test
 
-Release #4 (due by Week 11): 
+4. Release #4 (due by Week 11): 
 
 Front-end website design and integration with back-end system. 
 Front-end website contains functions as below:
@@ -65,6 +65,6 @@ Front-end website contains functions as below:
 * Audio search by keywords and search result display
 * ...
 
-Release #5 (due by Week 13): 
+5. Release #5 (due by Week 13): 
 
 Test and stretch feature realization.
