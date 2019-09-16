@@ -22,3 +22,48 @@ A high-level architecture of the Project:
 ## 5. Acceptance criteria
 
 ## 6. Release Planning
+Release #1 (due by Week 5): 
+
+Overall structure and interfaces establishment, and user register/login module completion, integrating with Amazon S3 and DynamoDB: 
+* Establish the structure of the overall system and respective module including:
+  * User register/login
+  * User management (including user account creation, update, data retrieve and deletion)
+  * Audio File Management (including audio storage, retrieve, update and deletion)
+  * Audio File Transcription (including transcription storage, retrieve, update and deletion)
+* User register/login module completion
+  * Identify user account data structure (username, password, audio file object, audio object, ...)
+  * New user account establishment
+  * User login check
+* Test
+  * Write dummy code to test overall structure and module interfaces
+
+Release #2 (due by Week 7): 
+
+Audio File Management module completion, integrating with Amazon S3, AWS DynamoDB:
+* Identify audio file data structure (audio title, audio, uploaded time, transcription status, ...)
+* Realize audio file uploading/storing, downloading/retrieve, deletion, search by title/time, ...
+* Test
+
+Release #3 (due by Week 9): 
+
+Audio File Transacription module completion, integrating with AWS Lambda, AWS Comprehend and AWS DynamoDB:
+* Update audio file data structure (audio pointer, raw transcription, keywords, ...) 
+* Realize audio file transcription (integrate with AWS Comprehend service)
+* Realize audio file transcription and keywords storing, retrieve, deletion, update, search, ...
+* Test
+
+Release #4 (due by Week 11): 
+
+Front-end website design and integration with back-end system. 
+Front-end website contains functions as below:
+* User register/log-in
+* User audio file list display
+* Audio file uploading and keywords analysis
+* Uploaded audio file analysis result display and editing
+* Audio management including playing, deleting, and adding keywords (pending)
+* Audio search by keywords and search result display
+* ...
+
+Release #5 (due by Week 13): 
+
+Test and stretch feature realization.
