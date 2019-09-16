@@ -10,6 +10,7 @@ Building a user-friendly website that allows users to upload/download and use sp
 Utilizing AWS services like AWS S3, Lambda, Transcribe Service, DynamoDB, Comprehend for cloud platform, storage, audio/video-to-text translation, text analysis, etc. functions.
 
 ## 2. Users/Personas Of The Project
+Google Photos for Audio will be used by people who want to store and organize audio/video files in a user-searchable manner on the cloud. These people include journalists, academic researchers, and reporters who need to be able to search through the files with keywords.
 
 ## 3. Scope and Features Of The Project
 
