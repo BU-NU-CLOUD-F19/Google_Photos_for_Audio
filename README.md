@@ -14,6 +14,33 @@ High-level goals including:
 Google Photos for Audio will be used by people who want to store and organize audio/video files in a user-searchable manner on the cloud. These people include journalists, academic researchers, and reporters who need to be able to search through the files with keywords.
 
 ## 3. Scope and Features Of The Project
+This project provides basic functionality of a site like Google Photos but for audio clips. Below is an overview of the program features from the perspective of the program architecture.
+
+- Front end
+  - provides user-friendly UI
+    - displays a user’s audio files in a grid/list sorted by date uploaded
+  - allows users to login/register using Amazon/Google sign-in forms
+  - allows users to upload audio files from their computer’s file system
+  - allows users to search for audio using text
+  - allows users to delete audio files
+- Back end
+  - audio file management
+    - retrieve an audio file
+    - store new/uploaded audio file
+    - update status of audio file (has it been transcribed or not)
+    - delete audio file
+  - audio file transcription
+    - transcribes stored audio clips into text
+    - extract keywords or major topics of texts
+    - store transcribed texts
+    - delete transcription
+  - user management
+    - create a new user in the system
+    - retrieve user details
+    - update a user’s details
+    - delete a user
+    
+This project is not a social media platform where uploaded content is shared to users that are subscribed to the publisher. While sharing is a stretch feature, it would be in the form of sharing an item on Google Photos with another user, not posting to a live feed. 
 
 ## 4. Solution Concept
 ### High-Level architecture and goals:
