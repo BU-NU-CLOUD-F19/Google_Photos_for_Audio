@@ -16,7 +16,7 @@ Google Photos for Audio will be used by people who want to store and organize au
 ## 3. Scope and Features Of The Project
 
 ## 4. Solution Concept
-A high-level architecture of the Project:
+A high-level architecture of the project:
 ![Image text](https://github.com/MengtingSong/Google_Photos_for_Audio/blob/master/architecture.png)
 
 
