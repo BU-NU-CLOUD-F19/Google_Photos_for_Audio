@@ -56,7 +56,8 @@ The diagram of whole project's structure is as followed.
 * Why we choose AWS not GCP  
 Actually they are pretty similar and brand new for most of us. Both have strong function on cloud and database. After do some research we found that AWS have some more understandable tutorials to followed and perhaps have a larger user group, so we choose AWS instead of GCP.
 * Why DynamoDB not MongoDB  
-Both of them are NoSQL databases. DynamoDB is popular in the gaming industry as well as in the internet of things (IoT) industry. One fearure of DynamoDB is that you can’t have embedded data structures like you can with MongoDB. But Since we've already decided to use the AWS stack and we need a NoSQL database, then DynamoDB is a no-brainer.
+First we decide to choose NoSql instead of Sql database. Sql databse is better when the data type is stable, but when it comes to performance, like a lot of users using at the same time, searching for some words, NoSql is faster. One more reason is NoSql is easier to implement and no need to create the structure/table.   
+And Dynamo and MongoDB are both NoSQL databases. DynamoDB is popular in the gaming industry as well as in the internet of things (IoT) industry. One fearure of DynamoDB is that you can’t have embedded data structures like you can with MongoDB. But Since we've already decided to use the AWS stack and we need a NoSQL database, then DynamoDB is a no-brainer.
 * Why Django not Node.js  
 We decide to use Django to implement our website. It's a powerful web framework and can build a website quickly, some of us had used it before. And we had considered about using NodeJS. So the Node.js is a convenient tool to write javascript code on server side. And for now, Node is perhaps the hippest, the trendiest IT technology for people to learning right now. But the drawback is it's heavy for a new starter. So in this aspect, Django is better.
 ## 5. Acceptance criteria
