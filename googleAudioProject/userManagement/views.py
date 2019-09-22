@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from userManagement.models import UserManagement
-from userManagement.serializers import UserSerializer
+from .models import UserManagement
+from .serializers import UserSerializer
 from rest_framework import generics
 
 
