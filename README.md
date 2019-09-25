@@ -45,11 +45,12 @@ This project is not a social media platform where uploaded content is shared to 
 
 ## 4. Solution Concept
 ### High-Level architecture and goals:
-* Upload the media files in S3, an object storage service.
+* Upload the media files in Amazon S3, an object storage service.
 * An upload event will be pushed to AWS Pub/Sub topic.
-* Use AWS Lambda to watch for the pubsub topic and process the uploaded file to translate audio to text, using AWS Transcribe service.
-* Store the analysis result into a database, queryable by our website.
-* The site can run on either a Virtual Machine (VM) or as a K8s service.  
+* Use AWS Lambda to watch for the pubsub topic.
+* Use AWS Transcribe and Comprehend to process the uploaded file to translate audio to text.
+* Store the analysis result and user data into AWS DaynamoDB, queryable by our website.
+* The site will be run by AWS Lambda, while storing backend code on S3.
 The diagram of whole project's structure is as followed.
 ![Image text](https://github.com/MengtingSong/Google_Photos_for_Audio/blob/master/architecture.png)
 ### Design Implications and Discussion
@@ -64,7 +65,6 @@ We decide to use Django to implement our website. It's a powerful web framework 
 * Minimum acceptance criteria is a website which support upload media files and search by words operations.
 * Stretch Goal:
     * Automate the creation of various cloud resources using an infrastructure-as-code framework like Terraform.
-    * Use k8s to watch for the pubsub topic and process the uploaded file to translate audio to text.
     * Use a self-deployed kafka to better the message stream process.
 ## 6. Release Planning
 1. Release #1 (due by Week 5): 
