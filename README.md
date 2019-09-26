@@ -3,6 +3,9 @@
 ### Team members: Mengting Song, Damani Philip, Benjamin Chan,  Yuncheng Zhu
 ### Mentor: Hung Tran
 
+## 1st Presentation:
+https://docs.google.com/presentation/d/1DKc6HNFBpreAhHW4wiEahErnnkVCoF6U2zxHVuzRsHo/edit#slide=id.g61e26cbc8b_1_10
+
 ## 1. Vision and Goals Of The Project
 Google Photos for Audio/Video will establish a website similar to “Google Photo”. On a high level, users can come to the site to upload their media files; the audio in these files will then be transcribed, allowing users to search for media using words found in their audio/video content.
 
