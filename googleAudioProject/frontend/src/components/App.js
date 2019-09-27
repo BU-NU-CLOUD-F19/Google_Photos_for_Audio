@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 // import DataProvider from "./DataProvider";
 // import Table from "./Table";
-import SignUp from "./SignUp"
+import SignUp from "./SignUp";
+import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
+import NavigationBar from "./NavigationBar"
 
 
-class App extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.state = {};
@@ -16,7 +18,9 @@ class App extends Component {
     //             render={data => <Table data={data} />} />
 
     return (
-      <SignUp></SignUp>
+      <div>
+      <NavigationBar></NavigationBar>
+      </div>
     )
   }
 }
