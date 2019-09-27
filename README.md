@@ -3,6 +3,9 @@
 ### Team members: Mengting Song, Damani Philip, Benjamin Chan,  Yuncheng Zhu
 ### Mentor: Hung Tran
 
+## 1st Presentation:
+https://docs.google.com/presentation/d/1DKc6HNFBpreAhHW4wiEahErnnkVCoF6U2zxHVuzRsHo/edit#slide=id.p
+
 ## 1. Vision and Goals Of The Project
 Google Photos for Audio/Video will establish a website similar to “Google Photo”. On a high level, users can come to the site to upload their media files; the audio in these files will then be transcribed, allowing users to search for media using words found in their audio/video content.
 
@@ -45,13 +48,14 @@ This project is not a social media platform where uploaded content is shared to 
 
 ## 4. Solution Concept
 ### High-Level architecture and goals:
-* Upload the media files in S3, an object storage service.
+* Upload the media files in Amazon S3, an object storage service.
 * An upload event will be pushed to AWS Pub/Sub topic.
-* Use AWS Lambda to watch for the pubsub topic and process the uploaded file to translate audio to text, using AWS Transcribe service.
-* Store the analysis result into a database, queryable by our website.
-* The site can run on either a Virtual Machine (VM) or as a K8s service.  
+* Use AWS Lambda to watch for the pubsub topic.
+* Use AWS Transcribe and Comprehend to process the uploaded file to translate audio to text.
+* Store the analysis result and user data into AWS DaynamoDB, queryable by our website.
+* The site will be run by AWS Lambda, while storing backend code on S3.
 The diagram of whole project's structure is as followed.
-![Image text](https://github.com/MengtingSong/Google_Photos_for_Audio/blob/master/architecture.png)
+![Image text](https://github.com/BU-NU-CLOUD-F19/Google_Photos_for_Audio/blob/master/528_architecture_v2.png)
 ### Design Implications and Discussion
 * Why we choose AWS not GCP  
 Actually they are pretty similar and brand new for most of us. Both have strong function on cloud and database. After do some research we found that AWS have some more understandable tutorials to followed and perhaps have a larger user group, so we choose AWS instead of GCP.
@@ -62,19 +66,20 @@ And Dynamo and MongoDB are both NoSQL databases. DynamoDB is popular in the gami
 We decide to use Django to implement our website. It's a powerful web framework and can build a website quickly, some of us had used it before. And we had considered about using NodeJS. So the Node.js is a convenient tool to write javascript code on server side. And for now, Node is perhaps the hippest, the trendiest IT technology for people to learning right now. But the drawback is it's heavy for a new starter. So in this aspect, Django is better.
 ## 5. Acceptance criteria
 * Minimum acceptance criteria is a website which support upload media files and search by words operations.
-* Stretch Goal:
-    * Automate the creation of various cloud resources using an infrastructure-as-code framework like Terraform.
-    * Use k8s to watch for the pubsub topic and process the uploaded file to translate audio to text.
-    * Use a self-deployed kafka to better the message stream process.
+
 ## 6. Release Planning
 1. Release #1 (due by Week 5): 
 
-Overall structure and interfaces establishment, and user register/login module completion, integrating with Amazon S3 and DynamoDB: 
+Overall structure and interfaces establishment, and user register/login module completion, integrating with Amazon S3 and AWS DynamoDB, Lambda: 
+* Design the preliminary version of frontend website
 * Establish the structure of the overall system and respective module including:
   * User register/login
   * User management (including user account creation, update, data retrieve and deletion)
   * Audio File Management (including audio storage, retrieve, update and deletion)
   * Audio File Transcription (including transcription storage, retrieve, update and deletion)
+* Integrate with AWS Lambda and S3 to run the website
+  * Store backend code on S3
+  * Triger Lambda to run the website
 * User register/login module completion
   * Identify user account data structure (username, password, audio file object, audio object, ...)
   * New user account establishment
@@ -84,23 +89,22 @@ Overall structure and interfaces establishment, and user register/login module c
 
 2. Release #2 (due by Week 7): 
 
-Audio File Management module completion, integrating with Amazon S3, AWS DynamoDB:
+Audio File Management module completion, integrating with Amazon S3, AWS DynamoDB, Lambda:
 * Identify audio file data structure (audio title, audio, uploaded time, transcription status, ...)
 * Realize audio file uploading/storing, downloading/retrieve, deletion, search by title/time, ...
 * Test
 
 3. Release #3 (due by Week 9): 
 
-Audio File Transacription module completion, integrating with AWS Lambda, AWS Comprehend and AWS DynamoDB:
-* Update audio file data structure (audio pointer, raw transcription, keywords, ...) 
-* Realize audio file transcription (integrate with AWS Comprehend service)
+Audio File Transacription module completion, integrating with AWS Lambda, AWS Transcribe, Comprehend, S3 and DynamoDB:
+* Update audio file data structure (audio title/reference, transcription, keywords, ...) 
+* Realize audio file transcription (integrate with AWS Transcribe and Comprehend service)
 * Realize audio file transcription and keywords storing, retrieve, deletion, update, search, ...
 * Test
 
 4. Release #4 (due by Week 11): 
 
-Front-end website design and integration with back-end system. 
-Front-end website contains functions as below:
+User-friendly design of front-end website whch contains functions as below:
 * User register/log-in
 * User audio file list display
 * Audio file uploading and keywords analysis
