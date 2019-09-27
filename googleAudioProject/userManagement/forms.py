@@ -9,6 +9,9 @@ class UserRegisterForm(UserCreationForm):
         model = CustomUser
         fields = ['name', 'email', 'password']
 
+class UserLoginForm():
+    pass
+
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser

@@ -16,7 +16,7 @@ export default class NavigationBar extends Component {
             <Navbar.Brand href="/">Google Photos for Audio</Navbar.Brand>
             <Nav className="ml-auto">
                 <Nav.Link href="/">Home</Nav.Link>
-                <Nav.Link href="/signIn">Sign In</Nav.Link>
+                <Nav.Link href="userManagement/signIn">Sign In</Nav.Link>
             </Nav>
         </Navbar>
         )

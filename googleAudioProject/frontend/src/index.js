@@ -8,8 +8,8 @@ const routing = (
     <Routing>
         <div>
             <Route exact path="/" component={App} />
-            <Route path="/signIn" component={SignIn} />
-            <Route path="/signUp" component={SignUp} />
+            <Route path="userManagement/signIn" component={SignIn} />
+            <Route path="userManagement/signUp" component={SignUp} />
         </div>
     </Routing>
 )
