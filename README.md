@@ -55,7 +55,7 @@ This project is not a social media platform where uploaded content is shared to 
 * Store the analysis result and user data into AWS DaynamoDB, queryable by our website.
 * The site will be run by AWS Lambda, while storing backend code on S3.
 The diagram of whole project's structure is as followed.
-![Image text](https://github.com/BU-NU-CLOUD-F19/Google_Photos_for_Audio/blob/master/528_architecture_v2.png)
+![Image text](https://github.com/BU-NU-CLOUD-F19/Google_Photos_for_Audio/blob/master/project_architecture.png)
 ### Design Implications and Discussion
 * Why we choose AWS not GCP  
 Actually they are pretty similar and brand new for most of us. Both have strong function on cloud and database. After do some research we found that AWS have some more understandable tutorials to followed and perhaps have a larger user group, so we choose AWS instead of GCP.
