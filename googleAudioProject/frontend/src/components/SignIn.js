@@ -12,13 +12,18 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from "axios";
+
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.withCredentials = true
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        Google Audio
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -51,8 +56,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
 export default function SignIn() {
   const classes = useStyles();
+
+  let inputEmail = React.createRef();
+  let inputPassword = React.createRef();
+
+  var handleEmailChange = function(newEvent){
+    console.log("email: " + inputEmail.current.value)
+  }
+  var handlePassChange = function(newEvent){
+    console.log("pass: " + inputPassword.current.value)
+  }
+  var handleLogin = function(newEvent){
+    axios.get("http://127.0.0.1:8000/login/")
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -66,6 +91,7 @@ export default function SignIn() {
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
+            onChange={handleEmailChange}
             variant="outlined"
             margin="normal"
             required
@@ -74,9 +100,11 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            inputRef={inputEmail}
             autoFocus
           />
           <TextField
+            onChange={handlePassChange}
             variant="outlined"
             margin="normal"
             required
@@ -85,13 +113,17 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            inputRef={inputPassword}
             autoComplete="current-password"
+            // onChange={this.handlePasswordChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
+            onClick={handleLogin}
+            href="/profile"
             type="submit"
             fullWidth
             variant="contained"

@@ -12,13 +12,18 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from "axios";
+
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.withCredentials = true
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+      <Link color="inherit" href="/">
+        Google Audio
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -54,6 +59,31 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  let inputName = React.createRef();
+  let inputEmail = React.createRef();
+  let inputPassword = React.createRef();
+
+  var handleNameChange = function(newEvent){
+    console.log("name: " + inputName.current.value)
+  }
+  var handleEmailChange = function(newEvent){
+    console.log("email: " + inputEmail.current.value)
+  }
+  var handlePassChange = function(newEvent){
+    console.log("pass: " + inputPassword.current.value)
+  }
+  var handleRegister = function(newEvent){
+    axios.post("http://127.0.0.1:8000/register/", {name: inputName.current.value,
+                                          email: inputEmail.current.value,
+                                          password: inputPassword.current.value})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -68,6 +98,7 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                onChange={handleNameChange}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -75,6 +106,7 @@ export default function SignUp() {
                 fullWidth
                 id="firstName"
                 label="First Name"
+                inputRef={inputName}
                 autoFocus
               />
             </Grid>
@@ -91,17 +123,20 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handleEmailChange}
                 variant="outlined"
                 required
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
+                inputRef={inputEmail}
                 autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                onChange={handlePassChange}
                 variant="outlined"
                 required
                 fullWidth
@@ -109,6 +144,7 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                inputRef={inputPassword}
                 autoComplete="current-password"
               />
             </Grid>
@@ -120,6 +156,8 @@ export default function SignUp() {
             </Grid>
           </Grid>
           <Button
+            onClick={handleRegister}
+            href="/user-list/"
             type="submit"
             fullWidth
             variant="contained"

@@ -1,93 +1,90 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.urls import reverse
-from django.contrib.auth import login, logout
-from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
-from django.views.generic.edit import FormView
+from django.contrib.auth import login, logout, authenticate
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import mixins, generics
 from .serializers import UserSerializer
+from .forms import UserRegisterForm
 from .models import CustomUser
-from .forms import UserRegisterForm, UserLoginForm
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import generics
 
+class UserRegister(generics.CreateAPIView):
+    serializer_class = UserSerializer
 
-# class HomeView():
-#     pass
-#     #
-#     # def get(self, request):
-#     #     content = {}
-#     #     if request.user.is_authenticated:
-#     #         print()
+    @api_view(["POST"])
+    def create_user(request):
+        form = UserRegisterForm(request.data)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()
+            user.save()
+            raw_password = form.cleaned_data.get('password')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return Response({"message": "User created."})
+        else:
+            data = {
+              "error": True,
+              "errors": serializer.errors,
+            }
+            return Response(data)
 
-class LoginView(mixins.CreateModelMixin,
-                mixins.RetrieveModelMixin,
-                mixins.UpdateModelMixin,
-                mixins.DestroyModelMixin,
-                generics.GenericAPIView):
+# class UserLogin(generics.RetrieveAPIView):
+#     serializer_class = UserSerializer
+#
+#     @api_view(["GET"])
+#     def user_details(request):
+#         form = UserRegisterForm(request.data)
+#         if form.is_valid():
+#             user = form.save()
+#             user.refresh_from_db()
+#             user.save()
+#             raw_password = form.cleaned_data.get('password')
+#             user = authenticate(username=user.username, password=raw_password)
+#             login(request, user)
+#             user = CustomUser.objects.get(id=pk)
+#             serializer = UserSerializer(user)
+#             return Response(serializer.data)
+#         else:
+#             data = {
+#               "error": True,
+#               "errors": serializer.errors,
+#             }
+#             return Response(data)
 
+class UserDetails(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    @api_view(["GET"])
+    def user_details(request, pk):
+        user = CustomUser.objects.get(id=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+class UserUpdate(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    @api_view(["GET", "PUT"])
+    def user_update(request, pk):
+        user = CustomUser.objects.get(id=pk)
+        if request.method == "PUT":
+            serializer = UserSerializer(user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response({"error": serializer.errors, "error": True})
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+class UserList(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
-# class RegisterView(FormView):
-#
-#     def get(self, request):
-#         content = {}
-#         content['form'] = UserRegisterForm
-#         return render(request, 'register.html', content) # change to fit actual register page name
-#
-#     def post(self, request):
-#         content = {}
-#         userForm = UserRegisterForm(request.POST, request.FILES or None)
-#         if userForm.is_valid():
-#             user = userForm.save(commit=False)
-#             user.password = make_password(form.cleaned_data['password'])
-#             user.save()
-#             login(request, user)
-#             return redirect(reverse('home-view'))
-#         content['form'] = userForm
-#         template = 'register.html' # change to fit actual register page name
-#         return render(request, template, content)
-#
-# class LoginView(FormView):
-#
-#     content = {}
-#     content['form'] = UserLoginForm
-#
-#     @method_decorator(csrf_exempt)
-#     def dispatch(self, request, *args, **kwargs):
-#         return super(LoginView, self).dispatch(request, *args, **kwargs)
-#
-#     def get(self, request):
-#         content = {}
-#         if request.user.is_authenticated:
-#             return redirect(reverse('home-view'))
-#         content['form'] = UserLoginForm
-#         return render(request, 'login.html', content)
-#
-#     def post(self, request):
-#         content = {}
-#         email = request.POST['email']
-#         password = request.POST['password']
-#         try:
-#             users = User.objects.filter(email=email)
-#             user = authenticate(request, username=users.first().username, password=password)
-#             login(request, user)
-#             return redirect(reverse('dashboard-view'))
-#         except Exception as e:
-#             content = {}
-#             content['form'] = UserLoginForm
-#             content['error'] = 'Unable to login with provided credentials' + e
-#             return render_to_response('login.html', content)
+    @api_view(["GET"])
+    def users_list(request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
