@@ -136,7 +136,7 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                onChange={handlePassChange}
+                onChange={handlePassChange, handleRegister}
                 variant="outlined"
                 required
                 fullWidth

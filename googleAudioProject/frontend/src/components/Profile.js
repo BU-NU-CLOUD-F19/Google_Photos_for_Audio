@@ -67,27 +67,17 @@ export default function Profile() {
   var userList;
   var tableData;
 
-  var createTableData = function(newEvent){
-    var arrayLength = userList.length;
-    for (var i = 0; i < arrayLength; i++) {
-        tableData[i][0] = userList.name;
-        tableData[i][1] = userList.email;
-    }
-  }
-
   var loadUsers = function(newEvent){
     axios.get("http://127.0.0.1:8000/user-list/")
           .then(function (response) {
             console.log(response);
             userList = response.data;
             console.log(userList);
-            createTableData;
-            console.log(tableData)
           })
           .catch(function (error) {
             console.log(error);
           })
-  }
+  } 
 
   return(
     <Container component="main" maxWidth="xs">
@@ -99,11 +89,7 @@ export default function Profile() {
         <Typography component="h1" variant="h5">
           Users
         </Typography>
-        <MUIDataTable
-          title={"User List"}
-          data={tableData}
-          columns={cols}
-        />
+
       </div>
       <Button
         onClick={loadUsers}

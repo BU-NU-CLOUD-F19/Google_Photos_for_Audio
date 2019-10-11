@@ -70,7 +70,8 @@ export default function SignIn() {
     console.log("pass: " + inputPassword.current.value)
   }
   var handleLogin = function(newEvent){
-    axios.get("http://127.0.0.1:8000/login/")
+    axios.post("http://127.0.0.1:8000/login/", {email: inputEmail.current.value,
+                                                password: inputPassword.current.value})
           .then(function (response) {
             console.log(response);
           })
@@ -104,7 +105,7 @@ export default function SignIn() {
             autoFocus
           />
           <TextField
-            onChange={handlePassChange}
+            onChange={handlePassChange, handleLogin}
             variant="outlined"
             margin="normal"
             required
@@ -115,7 +116,6 @@ export default function SignIn() {
             id="password"
             inputRef={inputPassword}
             autoComplete="current-password"
-            // onChange={this.handlePasswordChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -123,7 +123,6 @@ export default function SignIn() {
           />
           <Button
             onClick={handleLogin}
-            href="/profile"
             type="submit"
             fullWidth
             variant="contained"
