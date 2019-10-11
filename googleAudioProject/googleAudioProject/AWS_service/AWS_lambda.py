@@ -37,6 +37,20 @@ def lambda_handler(event, context):
         # load_json = json.dumps(json_text)  # json(str) type
         # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
         
+        transcript = json_text["results"]["transcripts"][0]["transcript"]
+
+        # call Comprehend detect entities function to find keywords
+        comprehend = boto3.client('comprehend')
+        comprehend_response = comprehend.detect_entities(
+            Text = transcript,
+            LanguageCode ='en'
+        )
+
+        # extract keywords from the transcript and store in a list
+        key_words = []
+        entities = comprehend_response["Entities"]
+        for i in entities:
+            key_words.append(i["Text"])
         
         # put to DynamoDB table
         table = dynamodb.Table('Transcribe_text')
