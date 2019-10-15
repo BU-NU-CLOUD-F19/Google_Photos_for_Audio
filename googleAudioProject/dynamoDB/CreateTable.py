@@ -5,10 +5,10 @@ from __future__ import print_function # Python 2/3 compatibility
 import boto3
 
 # TODO: change to dynamodb = boto3.resource('dynamodb',region_name='us-east-2') when uploading project
-dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-2', endpoint_url="http://localhost:8000")
 
 # Create "users" table in dynamoDB
-userTable = dynamodb.create_table(
+Table = dynamodb.create_table(
     TableName='users',
     KeySchema=[
         {
@@ -29,11 +29,11 @@ userTable = dynamodb.create_table(
 )
 
 # Wait until the table exists.
-userTable.meta.client.get_waiter('table_exists').wait(TableName='users')
-print("Table status:", userTable.table_status)
+Table.meta.client.get_waiter('table_exists').wait(TableName='users')
+print("Table status:", Table.table_status)
 
 # Create "files" table in dynamoDB
-fileTable = dynamodb.create_table(
+Table = dynamodb.create_table(
     TableName='files',
     KeySchema=[
         {
@@ -54,5 +54,5 @@ fileTable = dynamodb.create_table(
 )
 
 # Wait until the table exists.
-fileTable.meta.client.get_waiter('table_exists').wait(TableName='files')
-print("Table status:", fileTable.table_status)
+Table.meta.client.get_waiter('table_exists').wait(TableName='files')
+print("Table status:", Table.table_status)
