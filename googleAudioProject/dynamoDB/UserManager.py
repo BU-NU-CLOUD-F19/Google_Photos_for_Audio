@@ -30,7 +30,7 @@ class UserManager(object):
         response = table.query(
             KeyConditionExpression=Key('email').eq(self.email)
         )
-        if response.length != 0:
+        if response.length == 0:
             return True
         else:
             return False
