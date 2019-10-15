@@ -1,13 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import DataProvider from "./DataProvider";
-import Table from "./Table";
+import NavigationBar from "./NavigationBar"
 
-const App = () => (
-  <DataProvider endpoint="api/userManagement/"
-                render={data => <Table data={data} />} />
-);
+
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return (
+      <div>
+        <NavigationBar></NavigationBar>
+      </div>
+    )
+  }
+}
 
 const wrapper = document.getElementById("app");
-
 wrapper ? ReactDOM.render(<App />, wrapper) : null;
