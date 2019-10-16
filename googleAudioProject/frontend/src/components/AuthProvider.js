@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import { createStore } from "react-redux";
 
+// export function AuthProvider
+
+
+
+
+// var persistentState = {isLoggedIn: false};
 export const AuthContext = React.createContext();
 
 export default class AuthProvider extends Component {
@@ -8,12 +15,7 @@ export default class AuthProvider extends Component {
 
   constructor(props) {
     super(props);
-    if (AuthProvider.didUpdate == false) {
-        this.state = {isLoggedIn : false};
-        AuthProvider.didUpdate = true;
-    } else {
-        this.state = {isLoggedIn: true};
-    }
+    this.state = persistentState;
     
     console.log(this.state.isLoggedIn);
   }

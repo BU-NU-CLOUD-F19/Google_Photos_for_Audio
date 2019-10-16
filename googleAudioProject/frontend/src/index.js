@@ -9,21 +9,27 @@ import { Route, Link, Switch, BrowserRouter as Router } from "react-router-dom";
 import { AuthContext } from "./components/AuthProvider"
 import AuthProvider from "./components/AuthProvider"
 import Other from "./components/Other"
+import store from "./store/index"
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 
-// const routing = (
-//     <AuthProvider>
-//     <Router>
-//         <NavigationBar />
-//         <Switch>
-//             <Route exact path="/" component={App} />
-//             <Route path="/signIn" component={SignIn} />
-//             <Route path="/signUp" component={SignUp} />
-//             <Route path="/other" component={Other} />
-//             <Route path="/profile" component={Profile} />
-//         </Switch>
-//     </Router>
-//     </AuthProvider>
-// )
+const authStore = store;
+console.log(store.getState());
+
+const routing = (
+    <Provider store={authStore}>
+    <Router>
+        <NavigationBar />
+        <Switch>
+            <Route exact path="/" component={App} />
+            <Route path="/signIn" component={SignIn} />
+            <Route path="/signUp" component={SignUp} />
+            <Route path="/other" component={Other} />
+            <Route path="/profile" component={Profile} />
+        </Switch>
+    </Router>
+    </Provider>
+)
 
 // const routing = (
 //     <AuthProvider>
@@ -31,4 +37,4 @@ import Other from "./components/Other"
 //     </AuthProvider>
 // )
 
-// ReactDOM.render(routing, document.getElementById('app'));
+ReactDOM.render(routing, document.getElementById('app'));
