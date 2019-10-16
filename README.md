@@ -3,6 +3,9 @@
 ### Team members: Mengting Song, Damani Philip, Benjamin Chan,  Yuncheng Zhu
 ### Mentor: Hung Tran
 
+## 2nd Presentation:
+https://docs.google.com/presentation/d/1P8sDvwWMZO4az-FHJvorB3qE2Jd7LpmkNERJNCClKQY/edit#slide=id.g63d94f3009_0_208
+
 ## 1st Presentation:
 https://docs.google.com/presentation/d/1DKc6HNFBpreAhHW4wiEahErnnkVCoF6U2zxHVuzRsHo/edit#slide=id.p
 
