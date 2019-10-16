@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import TopLevelClass from "./TopLevelClass"
+import NavigationBar from "./NavigationBar"
 
 
-export default class App extends Component {
+export default class TopLevelClass extends Component {
   constructor() {
     super();
     this.state = {};
@@ -11,9 +11,8 @@ export default class App extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <TopLevelClass></TopLevelClass>
-      </React.Fragment>
+      <div>
+      </div>
     )
   }
 }
