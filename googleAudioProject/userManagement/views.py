@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.contrib.auth import login, logout, authenticate
-from django.utils.decorators import method_decorator
+from django.contrib.auth import login
 from .serializers import UserSerializer
 from .models import CustomUser
-from .forms import UserRegisterForm, UserLoginForm
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
+from .UserManager import UserManager
+#from .FileManager import FileManager
 
 
 class UserRegister(generics.CreateAPIView):
@@ -20,24 +19,18 @@ class UserRegister(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         email = request.data['email']
         password = request.data['password']
-        form = UserRegisterForm(request.data)
-        if form.is_valid():
-            print(form.cleaned_data)
-            user = form.save()
-            user_auth = authenticate(username=form.cleaned_data['email'],
-                                password=form.cleaned_data['password'])
-            print(user)
+        user = UserManager(email, password)
+        print(user)
+        if user.new_user():
+            user.add_user()
+            #file = FileManager(email, None)
+            #file.add_user_repo()
+            print(self.messages['auth_success'])
             return Response(data=self.messages['auth_success'], status=200)
-        # else:
-        #     print("registration error")
-        return Response(data=form.errors)
-            # try:
-                # user = authenticate(request, username=email, password=password)
-                # print("User created.")
-                # return self.create(request, *args, **kwargs)
-            # except:
-            #     print("User not created.")
-            #     return Response(data=self.messages['auth_fail'], status=400)
+        else:
+            print('User existed!' + self.messages['auth_fail'])
+            return Response(data=self.messages['auth_fail'], status=400)
+
 
 class UserLogin(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -51,15 +44,16 @@ class UserLogin(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         email = request.data['email']
         password = request.data['password']
-        # print(email)
-        # print(password)
-        print(request.data)
-        user = authenticate(request, username=email, password=password)
-        print(user)
-        if user is not None:
+        user = UserManager(email, password)
+        # TODO: add functions for getting user file info
+        if user.success_login():
             login(request, user)
             return Response(data=self.messages['success'], status=200)
         else:
+            if user.new_user():
+                print("Email is not registered!")
+            else:
+                print("Incorrect password!")
             return Response(data=self.messages['invalid'], status=400)
 
 class UserLogout():

@@ -17,7 +17,7 @@ class DecimalEncoder(json.JSONEncoder):
 
 
 # TODO: change to dynamodb = boto3.resource('dynamodb',region_name='us-east-2') when uploading project
-dynamodb = boto3.resource('dynamodb', region_name='us-east-2', endpoint_url="http://localhost:8000")
+dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
 
 class UserManager(object):
