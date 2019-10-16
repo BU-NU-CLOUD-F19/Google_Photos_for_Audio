@@ -16,7 +16,6 @@ class DecimalEncoder(json.JSONEncoder):
         return super(DecimalEncoder, self).default(o)
 
 
-# TODO: change to dynamodb = boto3.resource('dynamodb',region_name='us-east-2') when uploading project
 dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
 
@@ -30,7 +29,7 @@ class UserManager(object):
         response = table.query(
             KeyConditionExpression=Key('email').eq(self.email)
         )
-        if response.length == 0:
+        if response.get('Count') == 0:
             return True
         else:
             return False
@@ -51,7 +50,7 @@ class UserManager(object):
         response = table.query(
             KeyConditionExpression=Key('email').eq(self.email) & Key('password').eq(self.password)
         )
-        if response.length != 0:
+        if response.get('Count') != 0:
             return True
         else:
             return False

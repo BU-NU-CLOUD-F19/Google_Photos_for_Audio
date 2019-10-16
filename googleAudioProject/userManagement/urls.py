@@ -1,4 +1,5 @@
 from django.urls import re_path
+# from .views import UserLogin, UserRegister, UserDetails, UserList
 from .views import UserLogin, UserRegister, UserDetails, UserList
 
 

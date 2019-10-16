@@ -20,11 +20,10 @@ class UserRegister(generics.CreateAPIView):
         email = request.data['email']
         password = request.data['password']
         user = UserManager(email, password)
-        print(user)
+
         if user.new_user():
             user.add_user()
-            #file = FileManager(email, None)
-            #file.add_user_repo()
+            # TODO: create a new user inf files database
             print(self.messages['auth_success'])
             return Response(data=self.messages['auth_success'], status=200)
         else:
