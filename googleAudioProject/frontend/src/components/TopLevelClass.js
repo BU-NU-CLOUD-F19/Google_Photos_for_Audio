@@ -11,6 +11,7 @@ export default class TopLevelClass extends Component {
 
   render() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     // console.log(AuthContext);
     return (
       <div
@@ -42,6 +43,9 @@ export default class TopLevelClass extends Component {
       // </div>
 =======
     return (
+=======
+    return (
+>>>>>>> parent of 83a97ab... Added some code to share context
       <div>
       </div>
 >>>>>>> parent of 83a97ab... Added some code to share context
