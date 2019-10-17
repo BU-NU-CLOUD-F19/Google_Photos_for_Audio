@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default class NavigationBar extends Component {
     constructor(props) {
@@ -13,7 +12,6 @@ export default class NavigationBar extends Component {
     render() {
         return (
         <div>
-        <CssBaseline />
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <Navbar.Brand as={Link} to="/">Google Photos for Audio</Navbar.Brand>
             <Navbar.Toggle />
