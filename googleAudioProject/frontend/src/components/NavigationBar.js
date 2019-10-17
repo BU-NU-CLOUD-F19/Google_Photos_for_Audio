@@ -3,33 +3,7 @@ import ReactDOM from "react-dom";
 import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-
-
-const useStyles = theme => ({
-    '@global': {
-      body: {
-        backgroundColor: theme.palette.common.white,
-      },
-    },
-    paper: {
-      marginTop: theme.spacing(8),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-  });
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default class NavigationBar extends Component {
     constructor(props) {
@@ -38,7 +12,9 @@ export default class NavigationBar extends Component {
 
     render() {
         return (
-        <Navbar style={useStyles.paper} bg="dark" variant="dark" expand="lg" fixed="top">
+        <div>
+        <CssBaseline />
+        <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
             <Navbar.Brand as={Link} to="/">Google Photos for Audio</Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse>
@@ -49,6 +25,7 @@ export default class NavigationBar extends Component {
             </Nav>
             </Navbar.Collapse>
         </Navbar>
+        </div>
         )
     }
 }
