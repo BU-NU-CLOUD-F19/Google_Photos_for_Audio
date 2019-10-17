@@ -1,25 +1,26 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import TopLevelClass from "./TopLevelClass"
-import AuthProvider from "./AuthProvider"
-import NavigationBar from "./NavigationBar"
-import SignIn from "./SignIn";
-import SignUp from "./SignUp";
-import Profile from "./Profile";
-import Other from "./Other"
-import { Route, Link, Switch, BrowserRouter as Router } from "react-router-dom";
 
 
 export default class App extends Component {
   constructor() {
     super();
+<<<<<<< HEAD
     this.state = {isLoggedIn : false};
+=======
+    this.state = {};
+>>>>>>> parent of 83a97ab... Added some code to share context
   }
 
   render() {
     return (
       <React.Fragment>
+<<<<<<< HEAD
         <TopLevelClass ></TopLevelClass>
+=======
+        <TopLevelClass></TopLevelClass>
+>>>>>>> parent of 83a97ab... Added some code to share context
       </React.Fragment>
     )
   }
@@ -27,6 +28,7 @@ export default class App extends Component {
 
 // const wrapper = document.getElementById("app");
 // wrapper ? ReactDOM.render(<App />, wrapper) : null;
+<<<<<<< HEAD
 
 // const App = (
 //   <AuthProvider>
@@ -44,3 +46,5 @@ export default class App extends Component {
 // )
 
 // ReactDOM.render(App, document.getElementById('app'));
+=======
+>>>>>>> parent of 83a97ab... Added some code to share context

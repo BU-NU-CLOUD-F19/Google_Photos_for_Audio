@@ -1,22 +1,16 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import NavigationBar from "./NavigationBar"
-import { AuthContext } from "./AuthProvider"
-import AuthProvider from "./AuthProvider"
 
 
 export default class TopLevelClass extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+    this.state = {};
   }
 
-  // handleLogInChange = (newState) => {
-  //   this.setState(
-  //       {isLoggedIn: newState}
-  //   )
-  // }
-
   render() {
+<<<<<<< HEAD
     // console.log(AuthContext);
     return (
       <div
@@ -46,6 +40,11 @@ export default class TopLevelClass extends Component {
       
       // </AuthContext.Consumer> */}
       // </div>
+=======
+    return (
+      <div>
+      </div>
+>>>>>>> parent of 83a97ab... Added some code to share context
     )
   }
 }
