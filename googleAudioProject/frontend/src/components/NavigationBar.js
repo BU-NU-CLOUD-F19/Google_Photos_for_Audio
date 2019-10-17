@@ -1,43 +1,49 @@
-// import React, { Component } from "react";
-// import ReactDOM from "react-dom";
-// import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 
-// export default class NavigationBar extends Component {
-//     constructor(props) {
-//         super(props);
-//     }
+export default class NavigationBar extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-//     render() {
-//         return (
-//         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
-//             <Navbar.Brand href="/">Google Photos for Audio</Navbar.Brand>
-//             <Nav className="ml-auto">
-//                 <Nav.Link href="/">Home</Nav.Link>
-//                 <Nav.Link href="/signIn">Sign In</Nav.Link>
-//             </Nav>
-//         </Navbar>
-//         )
-//     }
-// }
-
-import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-const NavigationBar = () => {
-    return(
-        <div>
-        <AppBar position="static">
-            <Toolbar>
-                <Typography variant="title" color="inherit">
-                React & Material-UI Sample Application
-                </Typography>
-            </Toolbar>
-        </AppBar>
-        </div>
-    )
+    render() {
+        return (
+        <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+            <Navbar.Brand as={Link} to="/">Google Photos for Audio</Navbar.Brand>
+            <Navbar.Toggle />
+            <Navbar.Collapse>
+            <Nav className="ml-auto">
+                <Nav.Link as={Link} to="/">Home</Nav.Link>
+                <Nav.Link as={Link} to="/signIn">Sign In</Nav.Link>
+                <Nav.Link as={Link} to="/other">Other</Nav.Link>
+            </Nav>
+            </Navbar.Collapse>
+        </Navbar>
+        )
+    }
 }
-export default NavigationBar;
+
+// import React from 'react'
+// import AppBar from '@material-ui/core/AppBar'
+// import Toolbar from '@material-ui/core/Toolbar'
+// import Typography from '@material-ui/core/Typography'
+// const NavigationBar = () => {
+//     return(
+//         <div>
+//         <AppBar position="static">
+//             <Toolbar>
+//                 <Typography variant="title" color="inherit">
+//                 React & Material-UI Sample Application
+//                 </Typography>
+//             </Toolbar>
+//         </AppBar>
+//         </div>
+//     )
+// }
+// export default NavigationBar;
 
 // import React from 'react';
 // import { makeStyles } from '@material-ui/core/styles';

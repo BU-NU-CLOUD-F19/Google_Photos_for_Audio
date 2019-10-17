@@ -15,7 +15,7 @@ export default class AuthProvider extends Component {
 
   constructor(props) {
     super(props);
-    this.state = persistentState;
+    this.state = {isLoggedIn: false};
     
     console.log(this.state.isLoggedIn);
   }
