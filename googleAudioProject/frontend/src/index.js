@@ -10,6 +10,17 @@ import { AuthContext } from "./components/AuthProvider"
 import AuthProvider from "./components/AuthProvider"
 import Other from "./components/Other"
 
+const NotFound = () => {
+    return (
+        <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            fontSize: '32px',
+            transform: 'translate(-50%, -50%)'
+        }}>
+            <h3>404 - Not Found</h3>
+        </div>
+    );
+};
 
 const routing = (
     <AuthProvider>
@@ -21,6 +32,7 @@ const routing = (
             <Route path="/signUp" component={SignUp} />
             <Route path="/profile" component={Profile} />
             <Route path="/other" component={Other} />
+            <Route component={NotFound} />
         </Switch>
     </Router>
     </AuthProvider>
