@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>userpage</title>
+
+</head>
+    <body>
+        <div class="container">
+            <p1>{{ email }}</p1>
+            <div>
+                {% for item in Info %}
+                    <h1>Audio name: {{ item.file_name }}</h1>
+                    <h1>file url:
+                        {{item.file_url}}
+                    </h1>
+                    <div>
+                        <h1>Transcript</h1>
+                        <div id = t>
+                        {{ item.transcript }}
+                        </div>
+                        <h1>Keywords</h1>
+                        <div id = t2>{{ item.key_words }}</div>
+                        <br><br><br><br><br><br><br><br>
+                    </div>
+                <br>
+                <br>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+{% load static %}
+<!-- use django static tag ton load js file and css file. -->
+<!--<script src="{% static 'js/audio_album.js' %}"></script>-->
+<link rel="stylesheet" href="{% static 'css/audio_album.css' %}">
+</html>
