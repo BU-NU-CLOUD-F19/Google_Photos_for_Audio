@@ -147,7 +147,10 @@ class S3_API():
         :return: True if file was uploaded, else False
         """
 
-        file_full_name = username + '/' + object_name
+        if object_name:
+            file_full_name = username + '/' + object_name
+        else:
+            file_full_name = username + '/' + file_name
         return self.upload_file(file_name, bucket, file_full_name)
 
 
