@@ -2,6 +2,7 @@ import json
 import time
 import boto3
 from urllib.request import urlopen
+from boto3.dynamodb.conditions import Key, Attr
 
 
 def create_uri(bucket_name, file_name):
@@ -16,11 +17,11 @@ def lambda_handler(event, context):
         file_obj = event["Records"][0]
         bucket_name = str(file_obj["s3"]["bucket"]["name"])
         file_name = str(file_obj["s3"]["object"]["key"])
-        user_name = file_name.split('/')[0]
+        user_email = file_name.split('/')[0]
         s3_uri = create_uri(bucket_name, file_name)
-        file_type = file_name.split('.')[1]
+        file_type = file_name.split('/')[1].split('.')[1]
         job_name = context.aws_request_id
-
+        print(s3_uri)
         transcribe.start_transcription_job(TranscriptionJobName = job_name,
                                             Media = {"MediaFileUri" : s3_uri},
                                             MediaFormat = file_type,
@@ -34,9 +35,15 @@ def lambda_handler(event, context):
 
         load_url = urlopen(status["TranscriptionJob"]["Transcript"]["TranscriptFileUri"])
         json_text = json.load(load_url)  # dictionary
+         dynamoDB_user
         # load_json = json.dumps(json_text)  # json(str) type
         # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
         
+
+        load_json = json.dumps(json_text)  # json(str) type
+
+        # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
+        development
         transcript = json_text["results"]["transcripts"][0]["transcript"]
 
         # call Comprehend detect entities function to find keywords
@@ -53,12 +60,29 @@ def lambda_handler(event, context):
             key_words.append(i["Text"])
         
         # put to DynamoDB table
-        table = dynamodb.Table('Transcribe_text')
-        table.put_item(
-            Item ={
-                'User_ID' : user_name,
-                'transcript' : transcript,
-                'key_words' : key_words
+        table = dynamodb.Table('Audio')
+
+        response = table.query(
+        KeyConditionExpression=Key('email').eq(user_email)
+    )
+        count = response['Count']
+        audio_dic = {'transcript':transcript,'file_name':file_name.split('/')[1],'file_url':s3_uri,'key_words':key_words,}
+
+        if count == 0:
+            table.put_item(
+                Item={
+                    'email': user_email,
+                    'audio_files': [audio_dic]
+                }
+            )
+        elif count == 1:
+            audio_list = response['Items'][0]['audio_files']
+            audio_list.append(audio_dic)
+            table.update_item(
+                Key = {'email':user_email},
+                UpdateExpression='SET audio_files = :val1',
+                ExpressionAttributeValues={
+                ':val1': audio_list
             }
         )
 
@@ -66,4 +90,3 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps('Transcript has been stored into DynamoDB!')
     }
-
