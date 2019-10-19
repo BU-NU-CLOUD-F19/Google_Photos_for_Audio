@@ -73,7 +73,7 @@ export default function SignIn() {
   var handleLogin = function(newEvent){
     axios.post("http://127.0.0.1:8000/login/", {email: inputEmail.current.value,
                                                 password: inputPassword.current.value})
-          .then(function (response) {
+          .then(function (w) {
             console.log(response);
           })
           .catch(function (error) {
@@ -106,7 +106,7 @@ export default function SignIn() {
             autoFocus
           />
           <TextField
-            onChange={handlePassChange, handleLogin}
+            onChange={handlePassChange}
             variant="outlined"
             margin="normal"
             required

@@ -35,9 +35,15 @@ def lambda_handler(event, context):
 
         load_url = urlopen(status["TranscriptionJob"]["Transcript"]["TranscriptFileUri"])
         json_text = json.load(load_url)  # dictionary
+         dynamoDB_user
+        # load_json = json.dumps(json_text)  # json(str) type
+        # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
+        
+
         load_json = json.dumps(json_text)  # json(str) type
 
         # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
+        development
         transcript = json_text["results"]["transcripts"][0]["transcript"]
 
         # call Comprehend detect entities function to find keywords
@@ -52,7 +58,7 @@ def lambda_handler(event, context):
         entities = comprehend_response["Entities"]
         for i in entities:
             key_words.append(i["Text"])
-
+        
         # put to DynamoDB table
         table = dynamodb.Table('Audio')
 
