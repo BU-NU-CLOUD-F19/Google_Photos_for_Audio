@@ -58,14 +58,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function Profile() {
   const classes = useStyles();
-  const cols = ["Name", "Email"];
 
   let name = React.createRef();
   let email = React.createRef();
   let password = React.createRef();
-
-  var userList;
-  var tableData;
 
   var loadUsers = function(newEvent){
     axios.get("http://127.0.0.1:8000/user-list/")
@@ -77,7 +73,7 @@ export default function Profile() {
           .catch(function (error) {
             console.log(error);
           })
-  } 
+  }
 
   return(
     <Container component="main" maxWidth="xs">
