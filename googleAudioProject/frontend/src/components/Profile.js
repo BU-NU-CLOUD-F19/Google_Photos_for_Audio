@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -15,6 +15,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import axios from "axios";
+import { UserContext } from "./UserProvider"
+
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -56,28 +58,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Profile() {
+export default function Profile(props) {
   const classes = useStyles();
-  const cols = ["Name", "Email"];
+  const user = useContext(UserContext);
 
   let name = React.createRef();
   let email = React.createRef();
   let password = React.createRef();
-
-  var userList;
-  var tableData;
-
-  var loadUsers = function(newEvent){
-    axios.get("http://127.0.0.1:8000/user-list/")
-          .then(function (response) {
-            console.log(response);
-            userList = response.data;
-            console.log(userList);
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-  } 
 
   return(
     <Container component="main" maxWidth="xs">
@@ -86,19 +73,20 @@ export default function Profile() {
         <Avatar className={classes.avatar}>
           <AccountCircleOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Users
+        <Typography component="h5">
+          {user.state.userEmail}
         </Typography>
-
       </div>
+
       <Button
-        onClick={loadUsers}
+        onClick={console.log(user)}
         fullWidth
         variant="contained"
         color="primary"
       >
-        Get Users
+        Get User
       </Button>
+
       <Box mt={8}>
         <Copyright />
       </Box>

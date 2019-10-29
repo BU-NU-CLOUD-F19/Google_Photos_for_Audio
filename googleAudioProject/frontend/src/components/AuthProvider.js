@@ -11,12 +11,11 @@ import { createStore } from "react-redux";
 export const AuthContext = React.createContext();
 
 export default class AuthProvider extends Component {
-    static didUpdate = false;
+  static didUpdate = false;
 
   constructor(props) {
     super(props);
     this.state = {isLoggedIn: false};
-    
     console.log(this.state.isLoggedIn);
   }
 
@@ -38,4 +37,3 @@ export default class AuthProvider extends Component {
     )
   }
 }
-
