@@ -1,19 +1,18 @@
 from django.contrib.auth import login
 from .serializers import UserSerializer
 from .models import CustomUser
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
 from .UserManager import UserManager, hash_password
-#from .FileManager import FileManager
+from rest_framework import generics
 
 
 class UserRegister(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     messages = {
-        'auth_success': 'User created.',
-        'auth_fail': 'User not created.',
+        'auth_success': 'New user created.',
+        'auth_fail': 'New user not created.',
     }
 
     def post(self, request, *args, **kwargs):
@@ -28,7 +27,7 @@ class UserRegister(generics.CreateAPIView):
             print(self.messages['auth_success'])
             return Response(data=self.messages['auth_success'], status=200)
         else:
-            print('User existed! ' + self.messages['auth_fail'])
+            print('User already exists! ' + self.messages['auth_fail'])
             return Response(data=self.messages['auth_fail'], status=400)
 
 
@@ -50,7 +49,7 @@ class UserLogin(generics.ListCreateAPIView):
             print("Email is not registered!")
         else:
             if user.success_login():
-                login(request, user)
+                # login(request, user)
                 return Response(data=self.messages['success'], status=200)
             else:
                 print("Incorrect password!")
@@ -62,33 +61,11 @@ class UserLogout():
 
 
 class UserDetails(generics.RetrieveAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    lookup_field="email"
-
-    @api_view(["GET"])
-    def user_details(request, email):
-        user = CustomUser.objects.get(email=email)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+    pass
 
 
 class UserUpdate(generics.RetrieveUpdateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-    @api_view(["GET", "PUT"])
-    def user_update(request, pk):
-        user = CustomUser.objects.get(id=pk)
-        if request.method == "PUT":
-            serializer = UserSerializer(user, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response({"error": serializer.errors, "error": True})
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+    pass
 
 
 class UserList(generics.ListAPIView):

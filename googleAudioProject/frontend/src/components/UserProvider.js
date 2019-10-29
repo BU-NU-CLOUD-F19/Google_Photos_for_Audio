@@ -2,21 +2,21 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { createStore } from "react-redux";
 
-// export function AuthProvider
+// export function UserProvider
 
 
 
 
 // var persistentState = {isLoggedIn: false};
-export const AuthContext = React.createContext();
+export const UserContext = React.createContext();
 
-export default class AuthProvider extends Component {
+export default class UserProvider extends Component {
   static didUpdate = false;
 
   constructor(props) {
     super(props);
-    this.state = {isLoggedIn: false};
-    console.log(this.state.isLoggedIn);
+    this.state = {userEmail: "email"};
+    console.log(this.state.userEmail);
   }
 
   componentDidUpdate = () => {
@@ -29,11 +29,11 @@ export default class AuthProvider extends Component {
 
   render() {
     return (
-        <AuthContext.Provider value={
-            {state: this.state,
-             setLogIn: (value) => this.setState({isLoggedIn: value})}}>
-        {this.props.children}
-        </AuthContext.Provider>
+        <UserContext.Provider value={
+          {state: this.state,
+          setEmail: (value) => this.setState({userEmail: value})}}>
+            {this.props.children}
+        </UserContext.Provider>
     )
   }
 }
