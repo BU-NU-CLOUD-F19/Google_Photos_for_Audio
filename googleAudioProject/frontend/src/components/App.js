@@ -6,7 +6,7 @@ import TopLevelClass from "./TopLevelClass"
 export default class App extends Component {
   constructor() {
     super();
-    this.state = {isLoggedIn : false};
+    this.state = {isAuthenticated : false};
   }
 
   render() {

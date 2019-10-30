@@ -3,19 +3,14 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import MUIDataTable from "mui-datatables";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { Link } from "react-router-dom";
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import axios from "axios";
 import { UserContext } from "./UserProvider"
+import { AuthContext } from "./AuthProvider"
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -26,7 +21,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="/">
+      <Link color="inherit" to="/">
         Google Audio
       </Link>{' '}
       {new Date().getFullYear()}
@@ -61,10 +56,13 @@ const useStyles = makeStyles(theme => ({
 export default function Profile(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
+  const auth = useContext(AuthContext);
 
-  let name = React.createRef();
-  let email = React.createRef();
-  let password = React.createRef();
+  const handleLogout = function(){
+    delete localStorage.accessToken;
+    auth.setAuth(false);
+    props.history.push('/');
+  }
 
   return(
     <Container component="main" maxWidth="xs">
@@ -76,16 +74,23 @@ export default function Profile(props) {
         <Typography component="h5">
           {user.state.userEmail}
         </Typography>
-      </div>
 
-      <Button
-        onClick={console.log(user)}
-        fullWidth
-        variant="contained"
-        color="primary"
-      >
-        Upload Audio
-      </Button>
+        <Button
+          onClick={console.log(user)}
+          fullWidth
+          variant="contained"
+          color="primary"
+        >
+          Upload Audio
+        </Button>
+
+        <Link
+          to="#"
+          onClick={handleLogout}
+          variant="body2">
+          {"Logout"}
+        </Link>
+      </div>
 
       <Box mt={8}>
         <Copyright />

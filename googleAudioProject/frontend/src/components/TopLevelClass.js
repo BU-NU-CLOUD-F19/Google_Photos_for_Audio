@@ -10,7 +10,7 @@ export default class TopLevelClass extends Component {
 
   render() {
     return (
-      <AuthContext.Consumer> 
+      <AuthContext.Consumer>
       { (context) => (
         <div
         style={{
@@ -19,11 +19,11 @@ export default class TopLevelClass extends Component {
             transform: 'translate(-50%, -50%)'
         }}
         >
-        {context.state.isLoggedIn? 'Logged in!': 'Welcome to Google Photos for Audio!'}
+        {context.state.isAuthenticated? 'User authenticated!': 'Welcome to Google Photos for Audio!'}
         </div>
         )
       }
-      
+
       </AuthContext.Consumer>
     );
   }
