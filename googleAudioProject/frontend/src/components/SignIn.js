@@ -76,7 +76,7 @@ export default function SignIn(props) {
   var handleLogin = function(newEvent){
     axios.post("http://127.0.0.1:8000/login/", {email: inputEmail.current.value,
                                                 password: inputPassword.current.value})
-          .then(function (w) {
+          .then(function (response) {
             console.log(response);
             props.history.push('/profile')
           })
