@@ -78,7 +78,7 @@ export default function SignIn(props) {
                                                 password: inputPassword.current.value})
           .then(function (response) {
             console.log(response);
-            props.history.push('/profile')
+            props.history.push('/profile');
           })
           .catch(function (error) {
             console.log(error);
@@ -94,7 +94,7 @@ export default function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in Please
+          Sign in
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -130,11 +130,9 @@ export default function SignIn(props) {
 
           <Button
             onClick={handleLogin}
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
             Sign In
           </Button>

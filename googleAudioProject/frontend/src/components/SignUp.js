@@ -82,7 +82,7 @@ export default function SignUp(props) {
                                           password: inputPassword.current.value})
           .then(function (response) {
             console.log(response);
-            props.history.push('/profile')
+            props.history.push('/profile');
           })
           .catch(function (error) {
             console.log(error);
@@ -162,11 +162,9 @@ export default function SignUp(props) {
           </Grid>
           <Button
             onClick={handleRegister}
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
             Sign Up
           </Button>
