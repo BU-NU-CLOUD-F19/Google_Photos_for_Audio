@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { createStore } from "react-redux";
 
-// export function UserProvider
 
-
-
-
-// var persistentState = {isLoggedIn: false};
 export const UserContext = React.createContext();
 
 export default class UserProvider extends Component {
@@ -22,10 +17,6 @@ export default class UserProvider extends Component {
   componentDidUpdate = () => {
       console.log(this.state);
   }
-
-//   componentDidMount = () => {
-//       console.log("uh oh");
-//   }
 
   render() {
     return (
