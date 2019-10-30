@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from "react-router-dom";
-// import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -14,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from "axios";
+import { UserContext } from "./UserProvider"
+
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -57,8 +58,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
+  const user = useContext(UserContext);
 
   let inputName = React.createRef();
   let inputEmail = React.createRef();
@@ -68,6 +70,7 @@ export default function SignUp() {
     console.log("name: " + inputName.current.value)
   }
   var handleEmailChange = function(newEvent){
+    user.setEmail(inputEmail.current.value)
     console.log("email: " + inputEmail.current.value)
   }
   var handlePassChange = function(newEvent){
@@ -79,6 +82,7 @@ export default function SignUp() {
                                           password: inputPassword.current.value})
           .then(function (response) {
             console.log(response);
+            props.history.push('/profile')
           })
           .catch(function (error) {
             console.log(error);
@@ -158,7 +162,6 @@ export default function SignUp() {
           </Grid>
           <Button
             onClick={handleRegister}
-            href="/user-list/"
             type="submit"
             fullWidth
             variant="contained"
