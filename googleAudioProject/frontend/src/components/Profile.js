@@ -47,10 +47,11 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
-  table: {
-    margin: theme.spacing(1),
-    minWidth: 400,
-    size: 'small',
+  footer:{
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 }));
 
@@ -93,9 +94,11 @@ export default function Profile(props) {
           </Link>
         </div>
 
-        <Box mt={8}>
-          <Copyright />
-        </Box>
+        <div className={classes.footer}>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </div>
       </Container>
     )
   }
@@ -104,12 +107,14 @@ export default function Profile(props) {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <WarningTwoToneIcon />
-        </Avatar>
+          <Avatar className={classes.avatar}>
+            <WarningTwoToneIcon />
+          </Avatar>
+
           <Typography variant="h4">
             Not logged in.
           </Typography>
+
           <Typography variant="body1">
             {"Please "}
             <Link
@@ -117,9 +122,11 @@ export default function Profile(props) {
               variant="body2">
               {"log in"}
             </Link>
-             {" to access your profile."}
+            {" to access your profile."}
           </Typography>
+        </div>
 
+        <div className={classes.footer}>
           <Box mt={8}>
             <Copyright />
           </Box>
