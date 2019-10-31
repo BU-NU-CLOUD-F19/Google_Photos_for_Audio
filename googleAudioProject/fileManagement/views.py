@@ -13,6 +13,7 @@ table = dynamodb.Table('Audio')
 class Userfiles(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
+        print("HERE!!!!!!!")
         user_email = request.data['user_email']
         print('success')
         response = table.get_item(
@@ -25,7 +26,8 @@ class Userfiles(generics.CreateAPIView):
         context = {}
         context['email'] = user_email
         context['Info'] = audio_info
-        return Response(data=audio_info, status=200)
+        # return Response(data=audio_info, status=200)
+        return Response(data='hi', status=200)
 
 
         # return render(request, 'homepage.html', context)

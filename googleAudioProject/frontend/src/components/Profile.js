@@ -36,9 +36,9 @@ function Copyright() {
   );
 }
 
-function HelloMessage(props) {
-    return <h1>hello {props.name}</h1>;
-}
+// function HelloMessage(props) {
+//     return <h1>hello {props.name}</h1>;
+// }
 
 function PullFiles(){
     return (
@@ -83,33 +83,83 @@ const config = {
         secretAccessKey: ''
         };
 
-export default function Profile(props) {
-  const classes = useStyles();
-  const user = useContext(UserContext);
+// const classes = useStyles();
+// const user = useContext(UserContext);
+// export default function Profile(props) {
+//   const classes = useStyles();
+//   const user = useContext(UserContext);
 
-  let name = React.createRef();
-  let email = React.createRef();
-  let password = React.createRef();
-//  let files = PullFiles();
+//   let name = React.createRef();
+//   let email = React.createRef();
+//   let password = React.createRef();
+// //  let files = PullFiles();
 
-//  console.log(files);
+// //  console.log(files);
 
-  return(
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+//   return(
+//     <Container component="main" maxWidth="xs">
+//       <CssBaseline />
+//       <div className={classes.paper}>
+//         <Avatar className={classes.avatar}>
+//           <AccountCircleOutlinedIcon />
+//         </Avatar>
+//         <Typography component="h5">
+//           {user.state.userEmail}
+//         </Typography>
+// //        <HelloMessage name="ggg" />
+//         <PullFiles />
+//       </div>
+
+//       <Button
+//         onClick={console.log(user)}
+//         fullWidth
+//         variant="contained"
+//         color="primary"
+//       >
+//         Upload Audio
+//       </Button>
+
+//       <Box mt={8}>
+//         <Copyright />
+//       </Box>
+//     </Container>
+//   )
+// }
+
+export default class Profile extends Component {
+   constructor(props) {
+     super(props);
+     this.state = {files : []};
+   }
+
+   componentDidMount() {
+     let response = PullFiles();
+     this.setState({files : response});
+     console.log('called pull files');
+
+   }
+   
+   render() {
+     return (
+      <div style={{
+        position: 'absolute', left: '50%', top: '50%',
+        fontSize: '32px',
+        transform: 'translate(-50%, -50%)'
+      }}>
+      <Container component="main" maxWidth="xs">
+      <div>
+        <Avatar>
           <AccountCircleOutlinedIcon />
         </Avatar>
-        <Typography component="h5">
-          {user.state.userEmail}
+        <Typography component="h1">
+          {/* {user.state.userEmail} */}
         </Typography>
-//        <HelloMessage name="ggg" />
-        <PullFiles />
+        <h1>Welcome!</h1>
+        {/* <HelloMessage name="ggg" /> */}
       </div>
 
       <Button
-        onClick={console.log(user)}
+        onClick={console.log('hello')}
         fullWidth
         variant="contained"
         color="primary"
@@ -120,49 +170,9 @@ export default function Profile(props) {
       <Box mt={8}>
         <Copyright />
       </Box>
-    </Container>
-  )
+      </Container>
+      </div>
+    );
+  }
 }
-
-//export default class Profile extends Component{
-//    constructor(props) {
-//        super(props);
-//    }
-//
-//    componentDidMount() {
-//
-//    }
-//
-//  const classes = useStyles();
-//  const user = useContext(UserContext);
-//
-//  return(
-//    <Container component="main" maxWidth="xs">
-//      <CssBaseline />
-//      <div className={classes.paper}>
-//        <Avatar className={classes.avatar}>
-//          <AccountCircleOutlinedIcon />
-//        </Avatar>
-//        <Typography component="h5">
-//          {user.state.userEmail}
-//        </Typography>
-////        <HelloMessage name="ggg" />
-//        <PullFiles />
-//      </div>
-//
-//      <Button
-//        onClick={console.log(user)}
-//        fullWidth
-//        variant="contained"
-//        color="primary"
-//      >
-//        Upload Audio
-//      </Button>
-//
-//      <Box mt={8}>
-//        <Copyright />
-//      </Box>
-//    </Container>
-//  )
-//}
 
