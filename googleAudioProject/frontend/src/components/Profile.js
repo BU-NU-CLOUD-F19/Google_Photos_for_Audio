@@ -79,8 +79,8 @@ const config = {
         bucketName : 'googleaudio',
         dirName: 'user2gmail.com',
         region: 'us-east-2',
-        accessKeyId: 'AKIAVJ45X5OX3IQLFQ6D',
-        secretAccessKey: '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'
+        accessKeyId: '',
+        secretAccessKey: ''
         };
 
 export default function Profile(props) {
