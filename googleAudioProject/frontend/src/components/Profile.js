@@ -3,20 +3,15 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
-import MUIDataTable from "mui-datatables";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { Link } from "react-router-dom";
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
-import { UserContext } from "./UserProvider";
-import { Component } from "react";
+import { UserContext } from "./UserProvider"
+import { AuthContext } from "./AuthProvider"
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -27,7 +22,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="/">
+      <Link color="inherit" to="/">
         Google Audio
       </Link>{' '}
       {new Date().getFullYear()}
@@ -36,11 +31,8 @@ function Copyright() {
   );
 }
 
-// function HelloMessage(props) {
-//     return <h1>hello {props.name}</h1>;
-// }
-
 function PullFiles(){
+    const user = useContext(UserContext);
     return (
     axios.post("http://127.0.0.1:8000/home/", {user_email:'user1gmail.com'})
           .then(function (response) {
@@ -50,7 +42,7 @@ function PullFiles(){
             console.log(error);
           })
           );
-  }
+}
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -68,10 +60,11 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
-  table: {
-    margin: theme.spacing(1),
-    minWidth: 400,
-    size: 'small',
+  footer:{
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 }));
 
@@ -83,96 +76,86 @@ const config = {
         secretAccessKey: ''
         };
 
-// const classes = useStyles();
-// const user = useContext(UserContext);
-// export default function Profile(props) {
-//   const classes = useStyles();
-//   const user = useContext(UserContext);
+export default function Profile(props) {
+  const classes = useStyles();
+  const user = useContext(UserContext);
+  const auth = useContext(AuthContext);
 
-//   let name = React.createRef();
-//   let email = React.createRef();
-//   let password = React.createRef();
-// //  let files = PullFiles();
+  const handleLogout = function(){
+    delete localStorage.accessToken;
+    auth.setAuth(false);
+    props.history.push('/');
+  }
 
-// //  console.log(files);
+  let response = PullFiles();
 
-//   return(
-//     <Container component="main" maxWidth="xs">
-//       <CssBaseline />
-//       <div className={classes.paper}>
-//         <Avatar className={classes.avatar}>
-//           <AccountCircleOutlinedIcon />
-//         </Avatar>
-//         <Typography component="h5">
-//           {user.state.userEmail}
-//         </Typography>
-// //        <HelloMessage name="ggg" />
-//         <PullFiles />
-//       </div>
-
-//       <Button
-//         onClick={console.log(user)}
-//         fullWidth
-//         variant="contained"
-//         color="primary"
-//       >
-//         Upload Audio
-//       </Button>
-
-//       <Box mt={8}>
-//         <Copyright />
-//       </Box>
-//     </Container>
-//   )
-// }
-
-export default class Profile extends Component {
-   constructor(props) {
-     super(props);
-     this.state = {files : []};
-   }
-
-   componentDidMount() {
-     let response = PullFiles();
-     this.setState({files : response});
-     console.log('called pull files');
-
-   }
-   
-   render() {
-     return (
-      <div style={{
-        position: 'absolute', left: '50%', top: '50%',
-        fontSize: '32px',
-        transform: 'translate(-50%, -50%)'
-      }}>
+  if(auth.state.isAuthenticated){
+    return(
       <Container component="main" maxWidth="xs">
-      <div>
-        <Avatar>
-          <AccountCircleOutlinedIcon />
-        </Avatar>
-        <Typography component="h1">
-          {/* {user.state.userEmail} */}
-        </Typography>
-        <h1>Welcome!</h1>
-        {/* <HelloMessage name="ggg" /> */}
-      </div>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <AccountCircleOutlinedIcon />
+          </Avatar>
+          <Typography component="h5">
+            {user.state.userEmail}
+          </Typography>
 
-      <Button
-        onClick={console.log('hello')}
-        fullWidth
-        variant="contained"
-        color="primary"
-      >
-        Upload Audio
-      </Button>
+          <Button
+            onClick={console.log(response)}
+            fullWidth
+            variant="contained"
+            color="primary"
+          >
+            Upload Audio
+          </Button>
 
-      <Box mt={8}>
-        <Copyright />
-      </Box>
+          <Link
+            to="#"
+            onClick={handleLogout}
+            variant="body2">
+            {"Logout"}
+          </Link>
+        </div>
+
+        <div className={classes.footer}>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </div>
       </Container>
-      </div>
-    );
+    )
+  }
+  else{
+    return(
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <WarningTwoToneIcon />
+          </Avatar>
+
+          <Typography variant="h4">
+            Not logged in.
+          </Typography>
+
+          <Typography variant="body1">
+            {"Please "}
+            <Link
+              to="/signIn"
+              variant="body2">
+              {"log in"}
+            </Link>
+            {" to access your profile."}
+          </Typography>
+        </div>
+
+        <div className={classes.footer}>
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </div>
+      </Container>
+    )
   }
 }
-

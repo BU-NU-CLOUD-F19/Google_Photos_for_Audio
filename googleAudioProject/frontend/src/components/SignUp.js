@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from "axios";
 import { UserContext } from "./UserProvider"
+import { AuthContext } from "./AuthProvider"
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -61,27 +62,30 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
+  const auth = useContext(AuthContext);
 
   let inputName = React.createRef();
   let inputEmail = React.createRef();
   let inputPassword = React.createRef();
 
-  var handleNameChange = function(newEvent){
-    console.log("name: " + inputName.current.value)
+  const handleNameChange = function(newEvent){
+    console.log("name: " + inputName.current.value);
   }
-  var handleEmailChange = function(newEvent){
-    user.setEmail(inputEmail.current.value)
-    console.log("email: " + inputEmail.current.value)
+  const handleEmailChange = function(newEvent){
+    user.setEmail(inputEmail.current.value);
+    console.log("email: " + inputEmail.current.value);
   }
-  var handlePassChange = function(newEvent){
-    console.log("pass: " + inputPassword.current.value)
+  const handlePassChange = function(newEvent){
+    console.log("pass: " + inputPassword.current.value);
   }
-  var handleRegister = function(newEvent){
+  const handleRegister = function(newEvent){
     axios.post("http://127.0.0.1:8000/register/", {name: inputName.current.value,
                                           email: inputEmail.current.value,
                                           password: inputPassword.current.value})
           .then(function (response) {
             console.log(response);
+            localStorage.accessToken = response.data.access;
+            auth.setAuth(true);
             props.history.push('/profile');
           })
           .catch(function (error) {

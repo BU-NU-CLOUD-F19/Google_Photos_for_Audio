@@ -11,9 +11,9 @@ export default class Other extends Component {
   render() {
     return (
       <div>
-      <AuthContext.Consumer> 
+      <AuthContext.Consumer>
       { (context) => (
-          <button onClick={() => context.setLogIn(true)} style={{
+          <button onClick={() => context.setAuth(true)} style={{
             position: 'absolute', left: '50%', top: '50%',
             fontSize: '32px',
             transform: 'translate(-50%, -50%)'
@@ -22,7 +22,7 @@ export default class Other extends Component {
           </button>
         )
       }
-      
+
       </AuthContext.Consumer>
       </div>
     )

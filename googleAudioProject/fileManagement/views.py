@@ -15,21 +15,21 @@ class Userfiles(generics.CreateAPIView):
     serializer_class = FileSerializer
 
     def post(self, request, *args, **kwargs):
-        print("HERE!!!!!!!")
         user_email = request.data['user_email']
-        print('success')
-        response = table.get_item(
-            Key={
-                'email': user_email
-            }
-        )
-        audio_info = response['Item']['audio_files']
-        print(audio_info)
-        context = {}
-        context['email'] = user_email
-        context['Info'] = audio_info
-        # return Response(data=audio_info, status=200)
-        return Response(data='hi', status=200)
+        try:
+            response = table.get_item(
+                Key={
+                    'email': user_email
+                }
+            )
+            audio_info = response['Item']['audio_files']
+            print(audio_info)
+            context = {}
+            context['email'] = user_email
+            context['Info'] = audio_info
+            return Response(data=audio_info, status=200)
+        except:
+            return Response(data='Audio files not loaded.', status=400)
 
 
         # return render(request, 'homepage.html', context)
