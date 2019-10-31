@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
 import { UserContext } from "./UserProvider"
 import { AuthContext } from "./AuthProvider"
@@ -63,38 +64,67 @@ export default function Profile(props) {
     auth.setAuth(false);
     props.history.push('/');
   }
+  if(auth.state.isAuthenticated){
+    return(
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <AccountCircleOutlinedIcon />
+          </Avatar>
+          <Typography component="h5">
+            {user.state.userEmail}
+          </Typography>
 
-  return(
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+          <Button
+            onClick={console.log(user)}
+            fullWidth
+            variant="contained"
+            color="primary"
+          >
+            Upload Audio
+          </Button>
+
+          <Link
+            to="#"
+            onClick={handleLogout}
+            variant="body2">
+            {"Logout"}
+          </Link>
+        </div>
+
+        <Box mt={8}>
+          <Copyright />
+        </Box>
+      </Container>
+    )
+  }
+  else{
+    return(
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <AccountCircleOutlinedIcon />
+          <WarningTwoToneIcon />
         </Avatar>
-        <Typography component="h5">
-          {user.state.userEmail}
-        </Typography>
+          <Typography variant="h4">
+            Not logged in.
+          </Typography>
+          <Typography variant="body1">
+            {"Please "}
+            <Link
+              to="/signIn"
+              variant="body2">
+              {"log in"}
+            </Link>
+             {" to access your profile."}
+          </Typography>
 
-        <Button
-          onClick={console.log(user)}
-          fullWidth
-          variant="contained"
-          color="primary"
-        >
-          Upload Audio
-        </Button>
-
-        <Link
-          to="#"
-          onClick={handleLogout}
-          variant="body2">
-          {"Logout"}
-        </Link>
-      </div>
-
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
-  )
+          <Box mt={8}>
+            <Copyright />
+          </Box>
+        </div>
+      </Container>
+    )
+  }
 }
