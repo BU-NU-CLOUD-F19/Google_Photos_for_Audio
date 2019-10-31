@@ -3,14 +3,16 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import generics
-import boto3
+from .serializers import FileSerializer
 
+import boto3
 # user_email = 'user1gmail.com'
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('Audio')
 
 
 class Userfiles(generics.CreateAPIView):
+    serializer_class = FileSerializer
 
     def post(self, request, *args, **kwargs):
         print("HERE!!!!!!!")
