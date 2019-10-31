@@ -15,7 +15,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import axios from "axios";
-import { UserContext } from "./UserProvider"
+import { UserContext } from "./UserProvider";
+import { Component } from "react";
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -34,6 +35,22 @@ function Copyright() {
     </Typography>
   );
 }
+
+function HelloMessage(props) {
+    return <h1>hello {props.name}</h1>;
+}
+
+function PullFiles(){
+    return (
+    axios.post("http://127.0.0.1:8000/home/", {user_email:'user1gmail.com'})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          );
+  }
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -58,6 +75,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const config = {
+        bucketName : 'googleaudio',
+        dirName: 'user2gmail.com',
+        region: 'us-east-2',
+        accessKeyId: 'AKIAVJ45X5OX3IQLFQ6D',
+        secretAccessKey: '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'
+        };
+
 export default function Profile(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
@@ -65,6 +90,9 @@ export default function Profile(props) {
   let name = React.createRef();
   let email = React.createRef();
   let password = React.createRef();
+//  let files = PullFiles();
+
+//  console.log(files);
 
   return(
     <Container component="main" maxWidth="xs">
@@ -76,6 +104,8 @@ export default function Profile(props) {
         <Typography component="h5">
           {user.state.userEmail}
         </Typography>
+//        <HelloMessage name="ggg" />
+        <PullFiles />
       </div>
 
       <Button
@@ -93,3 +123,46 @@ export default function Profile(props) {
     </Container>
   )
 }
+
+//export default class Profile extends Component{
+//    constructor(props) {
+//        super(props);
+//    }
+//
+//    componentDidMount() {
+//
+//    }
+//
+//  const classes = useStyles();
+//  const user = useContext(UserContext);
+//
+//  return(
+//    <Container component="main" maxWidth="xs">
+//      <CssBaseline />
+//      <div className={classes.paper}>
+//        <Avatar className={classes.avatar}>
+//          <AccountCircleOutlinedIcon />
+//        </Avatar>
+//        <Typography component="h5">
+//          {user.state.userEmail}
+//        </Typography>
+////        <HelloMessage name="ggg" />
+//        <PullFiles />
+//      </div>
+//
+//      <Button
+//        onClick={console.log(user)}
+//        fullWidth
+//        variant="contained"
+//        color="primary"
+//      >
+//        Upload Audio
+//      </Button>
+//
+//      <Box mt={8}>
+//        <Copyright />
+//      </Box>
+//    </Container>
+//  )
+//}
+

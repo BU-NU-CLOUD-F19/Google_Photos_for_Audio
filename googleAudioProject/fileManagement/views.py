@@ -1,12 +1,20 @@
 from botocore.exceptions import ClientError
 from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework import generics
+from rest_framework import generics
 import boto3
 
-user_email = 'user1gmail.com'
+# user_email = 'user1gmail.com'
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('Audio')
-def userpage(request):
-    try:
+
+
+class Userfiles(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        user_email = request.data['user_email']
+        print('success')
         response = table.get_item(
             Key={
                 'email': user_email
@@ -17,9 +25,7 @@ def userpage(request):
         context = {}
         context['email'] = user_email
         context['Info'] = audio_info
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-        print("The user doesn't exist")
+        return Response(data=audio_info, status=200)
 
-    return render(request, 'userpage.html', context)
 
+        # return render(request, 'homepage.html', context)
