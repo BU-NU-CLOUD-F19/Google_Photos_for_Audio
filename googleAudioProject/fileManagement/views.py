@@ -29,5 +29,5 @@ class Userfiles(generics.CreateAPIView):
             context['email'] = new_email
             context['Info'] = audio_info
             return Response(data=audio_info, status=200)
-    except:
-        return Response(data='Audio files not loaded.', status=400)
+        except:
+            return Response(data='Audio files not loaded.', status=400)
