@@ -5,4 +5,4 @@ from .models import CustomFile
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomFile
-        fields = ('filename')
+        fields = ('filename',)

@@ -68,14 +68,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const config = {
-        bucketName : 'googleaudio',
-        dirName: 'user2gmail.com',
-        region: 'us-east-2',
-        accessKeyId: '',
-        secretAccessKey: ''
-        };
-
 export default function Profile(props) {
   const classes = useStyles();
   const user = useContext(UserContext);
