@@ -34,7 +34,7 @@ function Copyright() {
 function PullFiles(){
     const user = useContext(UserContext);
     return (
-    axios.post("http://127.0.0.1:8000/home/", {user_email:'user1gmail.com'})
+    axios.post("http://127.0.0.1:8000/home/", {user_email:user.state.userEmail})
           .then(function (response) {
             console.log(response);
           })
@@ -80,6 +80,7 @@ export default function Profile(props) {
   }
 
   let response = PullFiles();
+  console.log(response)
 
   if(auth.state.isAuthenticated){
     return(
