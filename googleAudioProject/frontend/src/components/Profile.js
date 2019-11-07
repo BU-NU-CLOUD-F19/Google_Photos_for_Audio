@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -12,8 +12,9 @@ import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
 import { UserContext } from "./UserProvider"
 import { AuthContext } from "./AuthProvider"
-
-
+import ReactS3 from 'react-s3';
+import reactDom from 'react-dom';
+import { AWS } from '../../AWS_keys'
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.withCredentials = true
@@ -42,6 +43,29 @@ function PullFiles(){
             console.log(error);
           })
           );
+}
+
+function Upload_S3(e){
+  const config = {
+  bucketName: 'googleaudio',
+  dirName: 'user2__gmail.com', /* optional */
+  region: 'us-east-2',
+  accessKeyId: AWS.accessKeyId,
+  secretAccessKey: AWS.secretAccessKey,
+  }
+
+  return(
+   console.log(e),
+   console.log(e.target.files[0]),
+
+   ReactS3.uploadFile(e.target.files[0], config)
+   .then((data)=>{
+     console.log(data);
+   })
+   .catch((err)=>{
+     alert(err);
+   })
+)
 }
 
 const useStyles = makeStyles(theme => ({
@@ -102,7 +126,11 @@ export default function Profile(props) {
           >
             Upload Audio
           </Button>
-
+          <input
+          type = "file"
+          onChange = {Upload_S3}
+          accept="video/*,audio/*"
+          />
           <Link
             to="#"
             onClick={handleLogout}
