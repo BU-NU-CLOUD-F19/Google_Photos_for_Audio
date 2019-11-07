@@ -13,7 +13,8 @@ import axios from "axios";
 import { UserContext } from "./UserProvider";
 import { AuthContext } from "./AuthProvider";
 import { Table } from "react-bootstrap";
-
+import { AWS } from '../../AWS_keys';
+import ReactS3 from 'react-s3';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
