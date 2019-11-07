@@ -33,29 +33,6 @@ function Copyright() {
   );
 }
 
-function Upload_S3(e){
-  const config = {
-  bucketName: 'googleaudio',
-  dirName: 'user2__gmail.com', /* optional */
-  region: 'us-east-2',
-  accessKeyId: AWS.accessKeyId,
-  secretAccessKey: AWS.secretAccessKey,
-  }
-
-  return(
-   console.log(e),
-   console.log(e.target.files[0]),
-
-   ReactS3.uploadFile(e.target.files[0], config)
-   .then((data)=>{
-     console.log(data);
-   })
-   .catch((err)=>{
-     alert(err);
-   })
-)
-}
-
 // function PullFiles(){
 //     const user = useContext(UserContext);
 //     return (
@@ -123,10 +100,10 @@ class Profile extends Component {
   }
 
   PullFiles = async () => {
-    let user = this.context.user;
+    let user = this.context;
     let currentComponent = this;
     return (
-    axios.post("http://127.0.0.1:8000/home/", {user_email:'user1gmail.com'})//user.state.userEmail})
+    axios.post("http://127.0.0.1:8000/home/", {user_email:user.state.userEmail})//user.state.userEmail})
           .then(function (response) {
             currentComponent.setState({files: response['data']})
             console.log(response['data']);
@@ -136,6 +113,31 @@ class Profile extends Component {
           })
     );
   }
+
+  Upload_S3 = (e) => {
+  let user = this.context;
+  let user_email = user.state.userEmail;
+  let new_email = user_email.replace('@', '__');
+  const config = {
+  bucketName: 'googleaudio',
+  dirName: new_email, /* optional */
+  region: 'us-east-2',
+  accessKeyId: AWS.accessKeyId,
+  secretAccessKey: AWS.secretAccessKey,
+  }
+  return(
+   console.log(e),
+   console.log(e.target.files[0]),
+
+   ReactS3.uploadFile(e.target.files[0], config)
+   .then((data)=>{
+     console.log(data);
+   })
+   .catch((err)=>{
+     alert(err);
+   })
+)
+}
 
   async componentDidMount() {
     await this.PullFiles();
@@ -165,7 +167,7 @@ class Profile extends Component {
           </Button>
           <input
           type = "file"
-          onChange = {Upload_S3}
+          onChange = {this.Upload_S3}
           accept="video/*,audio/*"
           />
 
