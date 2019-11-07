@@ -31,6 +31,29 @@ function Copyright() {
   );
 }
 
+function Upload_S3(e){
+  const config = {
+  bucketName: 'googleaudio',
+  dirName: 'user2__gmail.com', /* optional */
+  region: 'us-east-2',
+  accessKeyId: AWS.accessKeyId,
+  secretAccessKey: AWS.secretAccessKey,
+  }
+
+  return(
+   console.log(e),
+   console.log(e.target.files[0]),
+
+   ReactS3.uploadFile(e.target.files[0], config)
+   .then((data)=>{
+     console.log(data);
+   })
+   .catch((err)=>{
+     alert(err);
+   })
+)
+}
+
 // function PullFiles(){
 //     const user = useContext(UserContext);
 //     return (
@@ -120,6 +143,12 @@ export default class Profile extends Component {
           >
             Upload Audio
           </Button>
+          <input
+          type = "file"
+          onChange = {Upload_S3}
+          accept="video/*,audio/*"
+          />
+
           <Link
             to="#"
             // onClick={handleLogout}
