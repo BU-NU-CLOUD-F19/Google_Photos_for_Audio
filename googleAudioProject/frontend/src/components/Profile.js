@@ -1,6 +1,6 @@
 import React, { useContext, Component } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
@@ -10,8 +10,9 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
-import { UserContext } from "./UserProvider"
-import { AuthContext } from "./AuthProvider"
+import { UserContext } from "./UserProvider";
+import { AuthContext } from "./AuthProvider";
+import { Table } from "react-bootstrap";
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -71,48 +72,68 @@ function Upload_S3(e){
 //   return (<li></li>files.map
 // }
 
-// const useStyles = makeStyles(theme => ({
-//   '@global': {
-//     body: {
-//       backgroundColor: theme.palette.common.white,
-//     },
-//   },
-//   paper: {
-//     marginTop: theme.spacing(8),
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//   },
-//   avatar: {
-//     margin: theme.spacing(1),
-//     backgroundColor: theme.palette.secondary.main,
-//   },
-//   footer:{
-//     position: 'absolute',
-//     left: 0,
-//     bottom: 0,
-//     right: 0,
-//   },
-// }));
+// const handleLogout = function(){
+//   delete localStorage.accessToken;
+//   auth.setAuth(false);
+//   props.history.push('/');
+// }
 
-export default class Profile extends Component {
+const AllContexts = React.createContext({
+  user: UserContext,
+  auth: AuthContext
+});
+
+const useStyles = theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  footer:{
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
+});
+
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {files : []};
   }
 
+  handleLogout = () => {
+    let auth = this.context.auth;
+    delete localStorage.accessToken;
+    console.log(typeof(auth));
+    auth.setAuth(false);
+    // props.history.push('/');
+  }
+
   PullFiles = async () => {
-    let user = this.context;
+    let user = this.context.user;
     let currentComponent = this;
     return (
     axios.post("http://127.0.0.1:8000/home/", {user_email:'user1gmail.com'})//user.state.userEmail})
           .then(function (response) {
             currentComponent.setState({files: response['data']})
+            console.log(response['data']);
           })
           .catch(function (error) {
             console.log(error);
           })
-          );
+    );
   }
 
   async componentDidMount() {
@@ -120,24 +141,22 @@ export default class Profile extends Component {
   }
 
   render() {
+    let user = this.context;
+    const { classes } = this.props;
     return (
-      <Container component="main" maxWidth="xs" style={{
-        position: 'absolute', left: '50%', top: '50%',
-        fontSize: '32px',
-        transform: 'translate(-50%, -50%)'
-    }}>
-        <CssBaseline />
-        <div>
-          <Avatar>
+      <Container component="main" maxWidth="xl">
+        {/* <CssBaseline /> */}
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
             <AccountCircleOutlinedIcon />
           </Avatar>
           <Typography component="h5">
-            {"test email"}
+            {user.state.userEmail}
           </Typography>
 
           <Button
             // onClick={console.log(response)}
-            fullWidth
+            // fullWidth
             variant="contained"
             color="primary"
           >
@@ -150,30 +169,44 @@ export default class Profile extends Component {
           />
 
           <Link
-            to="#"
-            // onClick={handleLogout}
+            to="/"
+            onClick={this.handleLogout}
             variant="body2">
             {"Logout"}
           </Link>
-          <ul>
-            {this.state.files.map((file) => {
-              return (<li>{file['file_name']}</li>)
-            })}
-          </ul>
+          <br />
+          <Table striped bordered hover size="sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>File Name</th>
+                {/* <th>File URL</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.files.map((file, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index}</td>
+                    <td>{file['file_name']}</td>
+                    {/* <td>{file['file_url']}</td> */}
+                  </tr>)
+              })}
+            </tbody>
+          </Table>
         </div>
-        <div>
+        {/* <div className={classes.footer}>
           <Box mt={8}>
             <Copyright />
           </Box>
-        </div>
+        </div> */}
       </Container>
     )
-
   }
-
 }
 
 Profile.contextType = UserContext;
+export default withStyles(useStyles)(Profile);
 
 
 
