@@ -84,7 +84,6 @@ const useStyles = theme => ({
 class Profile extends Component {
   constructor(props) {
     super(props);
-    console.log("CALLED");
     this.state = {isLoggedIn: false,
                   files : []};
   }
@@ -104,7 +103,8 @@ class Profile extends Component {
     axios.post("http://127.0.0.1:8000/home/", {user_email: user.state.userEmail})//user.state.userEmail})
           .then(function (response) {
             if (Array.isArray(response['data'])) {
-              currentComponent.setState({files: response['data']})
+              currentComponent.setState({isLoggedIn: user.state.isAuthenticated, 
+                                         files: response['data']})
             }
           })
           .catch(function (error) {
@@ -147,6 +147,7 @@ class Profile extends Component {
   render() {
     let user = this.context;
     const { classes } = this.props;
+    console.log(this.state.files);
 
     let content;
     if (this.state.isLoggedIn) {
@@ -168,7 +169,7 @@ class Profile extends Component {
                   </Button>
                   <input
                   type = "file"
-                  onChange = {this.Upload_S3}
+                  // onChange = {this.Upload_S3}
                   accept="video/*,audio/*"
                   />
 
