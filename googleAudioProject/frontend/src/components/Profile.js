@@ -14,7 +14,7 @@ import { UserContext } from "./UserProvider";
 import { AuthContext } from "./AuthProvider";
 import { Table } from "react-bootstrap";
 import { AWS } from '../../AWS_keys';
-// import ReactS3 from 'react-s3';
+import ReactS3 from 'react-s3';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -113,30 +113,30 @@ class Profile extends Component {
     );
   }
   
-  // Upload_S3 = (e) => {
-  //   let user = this.context;
-  //   let user_email = user.state.userEmail;
-  //   let new_email = user_email.replace('@', '__');
-  //   const config = {
-  //     bucketName: 'googleaudio',
-  //     dirName: new_email, /* optional */
-  //     region: 'us-east-2',
-  //     accessKeyId: AWS.accessKeyId,
-  //     secretAccessKey: AWS.secretAccessKey,
-  //   }
-  //   return(
-  //     console.log(e),
-  //     console.log(e.target.files[0]),
+  Upload_S3 = (e) => {
+    let user = this.context;
+    let user_email = user.state.userEmail;
+    let new_email = user_email.replace('@', '__');
+    const config = {
+      bucketName: 'googleaudio',
+      dirName: new_email, /* optional */
+      region: 'us-east-2',
+      accessKeyId: AWS.accessKeyId,
+      secretAccessKey: AWS.secretAccessKey,
+    }
+    return(
+      console.log(e),
+      console.log(e.target.files[0]),
 
-  //     ReactS3.uploadFile(e.target.files[0], config)
-  //     .then((data)=>{
-  //       console.log(data);
-  //     })
-  //     .catch((err)=>{
-  //       alert(err);
-  //     })
-  //   )
-  // }
+      ReactS3.uploadFile(e.target.files[0], config)
+      .then((data)=>{
+        console.log(data);
+      })
+      .catch((err)=>{
+        alert(err);
+      })
+    )
+  }
 
   async componentDidMount() {
     let user = this.context;
