@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { AuthContext } from "./AuthProvider"
+import { UserContext } from "./UserProvider"
 
 
 export default class TopLevelClass extends Component {
@@ -10,7 +11,7 @@ export default class TopLevelClass extends Component {
 
   render() {
     return (
-      <AuthContext.Consumer>
+      <UserContext.Consumer>
       { (context) => (
         <div
         style={{
@@ -24,7 +25,7 @@ export default class TopLevelClass extends Component {
         )
       }
 
-      </AuthContext.Consumer>
+      </UserContext.Consumer>
     );
   }
 }

@@ -82,6 +82,7 @@ export default function SignIn(props) {
             console.log(response);
             localStorage.accessToken = response.data.access;
             auth.setAuth(true);
+            user.setAuth(true);
             props.history.push('/profile');
           })
           .catch(function (error) {

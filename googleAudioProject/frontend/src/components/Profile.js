@@ -14,7 +14,7 @@ import { UserContext } from "./UserProvider";
 import { AuthContext } from "./AuthProvider";
 import { Table } from "react-bootstrap";
 import { AWS } from '../../AWS_keys';
-import ReactS3 from 'react-s3';
+// import ReactS3 from 'react-s3';
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -56,10 +56,6 @@ function Copyright() {
 //   props.history.push('/');
 // }
 
-const AllContexts = React.createContext({
-  user: UserContext,
-  auth: AuthContext
-});
 
 const useStyles = theme => ({
   '@global': {
@@ -88,121 +84,147 @@ const useStyles = theme => ({
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {files : []};
+    console.log("CALLED");
+    this.state = {isLoggedIn: false,
+                  files : []};
   }
 
   handleLogout = () => {
-    let auth = this.context.auth;
+    let user = this.context;
     delete localStorage.accessToken;
-    console.log(typeof(auth));
-    auth.setAuth(false);
+    user.setAuth(false);
     // props.history.push('/');
   }
 
   PullFiles = async () => {
     let user = this.context;
     let currentComponent = this;
+
     return (
-    axios.post("http://127.0.0.1:8000/home/", {user_email:user.state.userEmail})//user.state.userEmail})
+    axios.post("http://127.0.0.1:8000/home/", {user_email: user.state.userEmail})//user.state.userEmail})
           .then(function (response) {
-            currentComponent.setState({files: response['data']})
-            console.log(response['data']);
+            if (Array.isArray(response['data'])) {
+              currentComponent.setState({files: response['data']})
+            }
           })
           .catch(function (error) {
             console.log(error);
           })
     );
   }
+  
+  // Upload_S3 = (e) => {
+  //   let user = this.context;
+  //   let user_email = user.state.userEmail;
+  //   let new_email = user_email.replace('@', '__');
+  //   const config = {
+  //     bucketName: 'googleaudio',
+  //     dirName: new_email, /* optional */
+  //     region: 'us-east-2',
+  //     accessKeyId: AWS.accessKeyId,
+  //     secretAccessKey: AWS.secretAccessKey,
+  //   }
+  //   return(
+  //     console.log(e),
+  //     console.log(e.target.files[0]),
 
-  Upload_S3 = (e) => {
-  let user = this.context;
-  let user_email = user.state.userEmail;
-  let new_email = user_email.replace('@', '__');
-  const config = {
-  bucketName: 'googleaudio',
-  dirName: new_email, /* optional */
-  region: 'us-east-2',
-  accessKeyId: AWS.accessKeyId,
-  secretAccessKey: AWS.secretAccessKey,
-  }
-  return(
-   console.log(e),
-   console.log(e.target.files[0]),
-
-   ReactS3.uploadFile(e.target.files[0], config)
-   .then((data)=>{
-     console.log(data);
-   })
-   .catch((err)=>{
-     alert(err);
-   })
-)
-}
+  //     ReactS3.uploadFile(e.target.files[0], config)
+  //     .then((data)=>{
+  //       console.log(data);
+  //     })
+  //     .catch((err)=>{
+  //       alert(err);
+  //     })
+  //   )
+  // }
 
   async componentDidMount() {
+    let user = this.context;
+    this.setState({isLoggedIn: user.state.isAuthenticated, files: []});
     await this.PullFiles();
   }
 
   render() {
     let user = this.context;
     const { classes } = this.props;
+
+    let content;
+    if (this.state.isLoggedIn) {
+      content = <div className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                    <AccountCircleOutlinedIcon />
+                  </Avatar>
+                  <Typography component="h5">
+                    {user.state.userEmail}
+                  </Typography>
+
+                  <Button
+                    // onClick={console.log(response)}
+                    // fullWidth
+                    variant="contained"
+                    color="primary"
+                  >
+                    Upload Audio
+                  </Button>
+                  <input
+                  type = "file"
+                  onChange = {this.Upload_S3}
+                  accept="video/*,audio/*"
+                  />
+
+                  <Link
+                    to="/"
+                    onClick={this.handleLogout}
+                    variant="body2">
+                    {"Logout"}
+                  </Link>
+                  <br />
+                  <Table striped bordered hover size="sm">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>File Name</th>
+                        {/* <th>File URL</th> */}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.files.map((file, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{index}</td>
+                            <td>{file['file_name']}</td>
+                            {/* <td>{file['file_url']}</td> */}
+                          </tr>)
+                      })}
+                    </tbody>
+                  </Table>
+                </div>;
+    } else {
+      content = <div className={classes.paper}>
+                  <Avatar className={classes.avatar}>
+                    <WarningTwoToneIcon />
+                  </Avatar>
+
+                  <Typography variant="h4">
+                    Not logged in.
+                  </Typography>
+
+                  <Typography variant="body1">
+                    {"Please "}
+                    <Link
+                      to="/signIn"
+                      variant="body2">
+                      {"log in"}
+                    </Link>
+                    {" to access your profile."}
+                  </Typography>
+                </div>;
+    }
+
     return (
       <Container component="main" maxWidth="xl">
         {/* <CssBaseline /> */}
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <AccountCircleOutlinedIcon />
-          </Avatar>
-          <Typography component="h5">
-            {user.state.userEmail}
-          </Typography>
-
-          <Button
-            // onClick={console.log(response)}
-            // fullWidth
-            variant="contained"
-            color="primary"
-          >
-            Upload Audio
-          </Button>
-          <input
-          type = "file"
-          onChange = {this.Upload_S3}
-          accept="video/*,audio/*"
-          />
-
-          <Link
-            to="/"
-            onClick={this.handleLogout}
-            variant="body2">
-            {"Logout"}
-          </Link>
-          <br />
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>File Name</th>
-                {/* <th>File URL</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.files.map((file, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index}</td>
-                    <td>{file['file_name']}</td>
-                    {/* <td>{file['file_url']}</td> */}
-                  </tr>)
-              })}
-            </tbody>
-          </Table>
-        </div>
-        {/* <div className={classes.footer}>
-          <Box mt={8}>
-            <Copyright />
-          </Box>
-        </div> */}
+        {content}
       </Container>
     )
   }
@@ -210,167 +232,3 @@ class Profile extends Component {
 
 Profile.contextType = UserContext;
 export default withStyles(useStyles)(Profile);
-
-
-
-// export default function Profile(props) {
-//   const classes = useStyles();
-//   const user = useContext(UserContext);
-//   const auth = useContext(AuthContext);
-
-//   const handleLogout = function(){
-//     delete localStorage.accessToken;
-//     auth.setAuth(false);
-//     props.history.push('/');
-//   }
-
-//   let response = PullFiles();
-//   sleep(5);
-
-//   // console.log("KJLFSDJLJKSFD");
-
-//   // if (typeof response === 'Promise') {
-//   //   console.log('hello there');
-//   // } else {
-//   //   console.log('jdfskla');
-//   // }
-
-//   // console.log(response);
-//   // console.log('WHO KNOWS');
-
-//   if(auth.state.isAuthenticated){
-//     return(
-//       <Container component="main" maxWidth="xs">
-//         <CssBaseline />
-//         <div className={classes.paper}>
-//           <Avatar className={classes.avatar}>
-//             <AccountCircleOutlinedIcon />
-//           </Avatar>
-//           <Typography component="h5">
-//             {user.state.userEmail}
-//           </Typography>
-
-//           <Button
-//             // onClick={console.log(response)}
-//             fullWidth
-//             variant="contained"
-//             color="primary"
-//           >
-//             Upload Audio
-//           </Button>
-
-//           <Link
-//             to="#"
-//             onClick={handleLogout}
-//             variant="body2">
-//             {"Logout"}
-//           </Link>
-//         </div>
-//         {/* <div>{response}</div> */}
-//         {/* <ul>
-//         {
-//         })}
-//         </ul> */}
-
-//         <div className={classes.footer}>
-//           <Box mt={8}>
-//             <Copyright />
-//           </Box>
-//         </div>
-//       </Container>
-//     )
-//   }
-//   else{
-//     return(
-//       <Container component="main" maxWidth="xs">
-//         <CssBaseline />
-//         <div className={classes.paper}>
-//           <Avatar className={classes.avatar}>
-//             <WarningTwoToneIcon />
-//           </Avatar>
-
-//           <Typography variant="h4">
-//             Not logged in.
-//           </Typography>
-
-//           <Typography variant="body1">
-//             {"Please "}
-//             <Link
-//               to="/signIn"
-//               variant="body2">
-//               {"log in"}
-//             </Link>
-//             {" to access your profile."}
-//           </Typography>
-//         </div>
-
-//         <div className={classes.footer}>
-//           <Box mt={8}>
-//             <Copyright />
-//           </Box>
-//         </div>
-//       </Container>
-//     )
-//   }
-// }
-
-// const classes = useStyles();
-//   const user = useContext(UserContext);
-//   const auth = useContext(AuthContext);
-
-// export default class Profile extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {'data' : []};
-//   }
-  
-
-//   handleLogout = () => {
-//     delete localStorage.accessToken;
-//     auth.setAuth(false);
-//     props.history.push('/');
-//   }
-
-//   componentDidMount = () => {
-//     let response = PullFiles().then(console.log('hello i returned'));
-//     this.setState({'data' : response.data});
-//   }
-
-//   render() {
-
-//     return (
-//         <Container component="main" maxWidth="xs">
-//           <CssBaseline />
-//           <div>
-//             <Avatar>
-//               <AccountCircleOutlinedIcon />
-//             </Avatar>
-//             <Typography component="h5">
-//               "Test Email"
-//             </Typography>
-  
-//             <Button
-//               fullWidth
-//               variant="contained"
-//               color="primary"
-//             >
-//               Upload Audio
-//             </Button>
-  
-//             <Link
-//               to="#"
-//               variant="body2">
-//               {"Logout"}
-//             </Link>
-//           </div>  
-//           <div>
-//             <Box mt={8}>
-//               <Copyright />
-//             </Box>
-//           </div>
-//         </Container>
-//       );
-
-//   }
-
-// }
