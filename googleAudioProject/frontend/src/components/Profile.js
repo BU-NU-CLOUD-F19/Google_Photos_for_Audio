@@ -169,7 +169,7 @@ class Profile extends Component {
                   </Button>
                   <input
                   type = "file"
-                  // onChange = {this.Upload_S3}
+                   onChange = {this.Upload_S3}
                   accept="video/*,audio/*"
                   />
 
