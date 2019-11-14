@@ -5,6 +5,9 @@ import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import Box from '@material-ui/core/Box';
+import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
@@ -46,30 +49,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-// function PullFiles(){
-//     const user = useContext(UserContext);
-//     return (
-//     axios.post("http://127.0.0.1:8000/home/", {user_email:user.state.userEmail})
-//           .then(function (response) {
-//             console.log(response);
-//           })
-//           .catch(function (error) {
-//             console.log(error);
-//           })
-//           );
-// }
-
-// function DisplayFiles(files) {
-//   return (<li></li>files.map
-// }
-
-// const handleLogout = function(){
-//   delete localStorage.accessToken;
-//   auth.setAuth(false);
-//   props.history.push('/');
-// }
-
 
 const useStyles = theme => ({
   '@global': {
@@ -131,10 +110,10 @@ class Profile extends Component {
     let currentComponent = this;
 
     return (
-    axios.post("http://127.0.0.1:8000/home/", {user_email: 'user2@gmail.com'})//user.state.userEmail})//user.state.userEmail})
+    axios.post("http://127.0.0.1:8000/home/", {user_email: user.state.userEmail})
           .then(function (response) {
             if (Array.isArray(response['data'])) {
-              currentComponent.setState({isLoggedIn: user.state.isAuthenticated, 
+              currentComponent.setState({isLoggedIn: user.state.isAuthenticated,
                                          files: response['data']});
             }
           })
@@ -143,7 +122,7 @@ class Profile extends Component {
           })
     );
   }
-  
+
   Upload_S3 = (e) => {
     let user = this.context;
     let user_email = user.state.userEmail;
@@ -190,7 +169,6 @@ class Profile extends Component {
                     {user.state.userEmail}
                   </Typography>
 
-                  
                   <input
                     id="upload-button"
                     className={classes.input}
@@ -218,6 +196,53 @@ class Profile extends Component {
                   </Link>
                   <br />
                   <div>Files</div>
+
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                    spacing={1}
+                  >
+                    <Grid item xs={7}>
+                      <TextField
+                        // inputRef={this.inputSearchValue}
+                        // onChange={this.handleSearchChange}
+                        className={classes.textField}
+                        id="search"
+                        label="Search your files"
+                        type="search"
+                        fullWidth
+                        variant="outlined"
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <TextField
+                        // inputRef={this.inputSearchType}
+                        // onChange={this.handleSearchChange}
+                        className={classes.textField}
+                        select
+                        value=''
+                        id="search-select"
+                        label="Search by"
+                        fullWidth
+                        variant="outlined"
+                      >
+                        <MenuItem value={"filename"}>Filename</MenuItem>
+                        <MenuItem value={"keyword"}>Keyword</MenuItem>
+                      </TextField>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Button
+                        // onClick={this.handleSearchSubmit}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Search
+                      </Button>
+                    </Grid>
+                  </Grid>
+
                   {/* <Table striped bordered hover size="sm"> */}
                   <div>
                   {this.state.files.map((file, index) => {
@@ -246,7 +271,7 @@ class Profile extends Component {
                             </ExpansionPanelDetails>
                           </ExpansionPanel>)
                       })}
-                  
+
                   </div>
                 </div>;
     } else {
