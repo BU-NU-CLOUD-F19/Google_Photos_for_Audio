@@ -12,9 +12,23 @@ import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
 import { UserContext } from "./UserProvider";
 import { AuthContext } from "./AuthProvider";
-import { Table } from "react-bootstrap";
+// import { Table } from "react-bootstrap";
 import { AWS } from '../../AWS_keys';
 import ReactS3 from 'react-s3';
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Collapse from '@material-ui/core/Collapse';
+
+
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -79,13 +93,27 @@ const useStyles = theme => ({
     bottom: 0,
     right: 0,
   },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: '33.33%',
+    flexShrink: 0,
+  },
 });
 
 class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {isLoggedIn: false,
-                  files : []};
+                  files : [],
+                  expandedRow : null};
+  }
+
+  handleRowExpansion = (id) => {
+    let currentLogIn = this.state.isLoggedIn;
+    let currentFiles = this.state.files;
+
+    console.log(id);
+
   }
 
   handleLogout = () => {
@@ -100,11 +128,11 @@ class Profile extends Component {
     let currentComponent = this;
 
     return (
-    axios.post("http://127.0.0.1:8000/home/", {user_email: user.state.userEmail})//user.state.userEmail})
+    axios.post("http://127.0.0.1:8000/home/", {user_email: 'user2@gmail.com'})//user.state.userEmail})//user.state.userEmail})
           .then(function (response) {
             if (Array.isArray(response['data'])) {
               currentComponent.setState({isLoggedIn: user.state.isAuthenticated, 
-                                         files: response['data']})
+                                         files: response['data']});
             }
           })
           .catch(function (error) {
@@ -180,25 +208,37 @@ class Profile extends Component {
                     {"Logout"}
                   </Link>
                   <br />
-                  <Table striped bordered hover size="sm">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>File Name</th>
-                        {/* <th>File URL</th> */}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.files.map((file, index) => {
+                  <div>Files</div>
+                  {/* <Table striped bordered hover size="sm"> */}
+                  <div>
+                  {this.state.files.map((file, index) => {
                         return (
-                          <tr key={index}>
-                            <td>{index}</td>
-                            <td>{file['file_name']}</td>
-                            {/* <td>{file['file_url']}</td> */}
-                          </tr>)
+                          <ExpansionPanel>
+                            <ExpansionPanelSummary
+                              expandIcon={<ExpandMoreIcon />}
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                            >
+                              <Typography>{file['file_name']}</Typography>
+                            </ExpansionPanelSummary>
+                            <ExpansionPanelDetails>
+                              <div>
+                                <div>
+                                  <Typography>
+                                    Key Words
+                                  </Typography>
+                                </div>
+                                <div>
+                                  <Typography>
+                                    {file['key_words'].join(', ')}
+                                  </Typography>
+                                </div>
+                              </div>
+                            </ExpansionPanelDetails>
+                          </ExpansionPanel>)
                       })}
-                    </tbody>
-                  </Table>
+                  
+                  </div>
                 </div>;
     } else {
       content = <div className={classes.paper}>
