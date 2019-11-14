@@ -87,15 +87,8 @@ class Profile extends Component {
     super(props);
     this.state = {isLoggedIn: false,
                   files : [],
-                  expandedRow : null};
-  }
-
-  handleRowExpansion = (id) => {
-    let currentLogIn = this.state.isLoggedIn;
-    let currentFiles = this.state.files;
-
-    console.log(id);
-
+                  filteredFiles : []
+                };
   }
 
   handleLogout = () => {
@@ -103,6 +96,33 @@ class Profile extends Component {
     delete localStorage.accessToken;
     user.setAuth(false);
     // props.history.push('/');
+  }
+
+  filterSearchFiles = (e) => {
+    let keyword = e.target.value.toLowerCase();
+    let filterFiles = [];
+    let loginState = this.state.isLoggedIn;
+    let allFiles = this.state.files;
+
+    for (let i = 0; i < allFiles.length; i++) {
+      let keywordInFile = false;
+      let currentFile = allFiles[i];
+      for (let j = 0; j < currentFile['key_words'].length; j++) {
+        let lowerString = currentFile['key_words'][j].toLowerCase();
+        if (lowerString.includes(keyword)) {
+          keywordInFile = true;
+          break;
+        }
+      }
+
+      if (keywordInFile) {
+        filterFiles.push(currentFile);
+      }
+    }
+    
+    this.setState({isLoggedIn: loginState,
+                   files: allFiles,
+                   filteredFiles: filterFiles});
   }
 
   PullFiles = async () => {
@@ -114,7 +134,8 @@ class Profile extends Component {
           .then(function (response) {
             if (Array.isArray(response['data'])) {
               currentComponent.setState({isLoggedIn: user.state.isAuthenticated,
-                                         files: response['data']});
+                                         files: response['data'],
+                                         filteredFiles: response['data']});
             }
           })
           .catch(function (error) {
@@ -150,7 +171,7 @@ class Profile extends Component {
 
   async componentDidMount() {
     let user = this.context;
-    this.setState({isLoggedIn: user.state.isAuthenticated, files: []});
+    this.setState({isLoggedIn: user.state.isAuthenticated, files: [], filteredFiles: []});
     await this.PullFiles();
   }
 
@@ -195,8 +216,6 @@ class Profile extends Component {
                     {"Logout"}
                   </Link>
                   <br />
-                  <div>Files</div>
-
                   <Grid
                     container
                     direction="row"
@@ -207,7 +226,7 @@ class Profile extends Component {
                     <Grid item xs={7}>
                       <TextField
                         // inputRef={this.inputSearchValue}
-                        // onChange={this.handleSearchChange}
+                        onChange={this.filterSearchFiles}
                         className={classes.textField}
                         id="search"
                         label="Search your files"
@@ -219,7 +238,7 @@ class Profile extends Component {
                     <Grid item xs={3}>
                       <TextField
                         // inputRef={this.inputSearchType}
-                        // onChange={this.handleSearchChange}
+                        onChange={this.filterSearchFiles}
                         className={classes.textField}
                         select
                         value=''
@@ -245,7 +264,7 @@ class Profile extends Component {
 
                   {/* <Table striped bordered hover size="sm"> */}
                   <div>
-                  {this.state.files.map((file, index) => {
+                  {this.state.filteredFiles.map((file, index) => {
                         return (
                           <ExpansionPanel key={index}>
                             <ExpansionPanelSummary
