@@ -98,6 +98,9 @@ const useStyles = theme => ({
     flexBasis: '33.33%',
     flexShrink: 0,
   },
+  input: {
+    display: 'none',
+  },
 });
 
 class Profile extends Component {
@@ -187,19 +190,25 @@ class Profile extends Component {
                     {user.state.userEmail}
                   </Typography>
 
-                  <Button
-                    // onClick={console.log(response)}
-                    // fullWidth
-                    variant="contained"
-                    color="primary"
-                  >
-                    Upload Audio
-                  </Button>
+                  
                   <input
-                  type = "file"
-                   onChange = {this.Upload_S3}
-                  accept="video/*,audio/*"
+                    id="upload-button"
+                    className={classes.input}
+                    type = "file"
+                    onChange = {this.Upload_S3}
+                    accept="video/*,audio/*"
                   />
+                  <label htmlFor="upload-button">
+                    <Button
+                      // onClick={console.log(response)}
+                      // fullWidth
+                      variant="contained"
+                      component="span"
+                      color="primary"
+                    >
+                      Upload Audio
+                    </Button>
+                  </label>
 
                   <Link
                     to="/"
@@ -213,7 +222,7 @@ class Profile extends Component {
                   <div>
                   {this.state.files.map((file, index) => {
                         return (
-                          <ExpansionPanel>
+                          <ExpansionPanel key={index}>
                             <ExpansionPanelSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1a-content"
@@ -225,12 +234,12 @@ class Profile extends Component {
                               <div>
                                 <div>
                                   <Typography>
-                                    Key Words
+                                    Transcript
                                   </Typography>
                                 </div>
                                 <div>
                                   <Typography>
-                                    {file['key_words'].join(', ')}
+                                    {file['transcript']}
                                   </Typography>
                                 </div>
                               </div>
@@ -266,6 +275,7 @@ class Profile extends Component {
       <Container component="main" maxWidth="xl">
         {/* <CssBaseline /> */}
         {content}
+        <br />
       </Container>
     )
   }
