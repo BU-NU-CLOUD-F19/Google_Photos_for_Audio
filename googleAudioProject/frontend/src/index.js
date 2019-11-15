@@ -11,6 +11,7 @@ import AuthProvider from "./components/AuthProvider"
 import UserProvider from "./components/UserProvider"
 import Other from "./components/Other"
 import HomePage from "./components/UserPage"
+import myDialog from "./components/myDialog"
 
 const NotFound = () => {
     return (
@@ -36,6 +37,7 @@ const routing = (
             <Route path="/profile" component={Profile} />
             <Route path="/other" component={Other} />
             <Route path="/homepage" component={HomePage} />
+            {/* <Route path="/dialog" component={myDialog} /> */}
             <Route component={NotFound} />
         </Switch>
     </Router>

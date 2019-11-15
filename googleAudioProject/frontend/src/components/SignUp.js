@@ -1,62 +1,61 @@
-import React, { useContext } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { useContext } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 import { Link } from "react-router-dom";
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import axios from "axios";
-import { UserContext } from "./UserProvider"
-import { AuthContext } from "./AuthProvider"
-
+import { UserContext } from "./UserProvider";
+import { AuthContext } from "./AuthProvider";
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" to="/">
         Google Audio
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
+  "@global": {
     body: {
-      backgroundColor: theme.palette.common.white,
-    },
+      backgroundColor: theme.palette.common.white
+    }
   },
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    margin: theme.spacing(3, 0, 2)
+  }
 }));
 
 export default function SignUp(props) {
@@ -68,30 +67,38 @@ export default function SignUp(props) {
   let inputEmail = React.createRef();
   let inputPassword = React.createRef();
 
-  const handleNameChange = function(newEvent){
+  const handleNameChange = function(newEvent) {
     console.log("name: " + inputName.current.value);
-  }
-  const handleEmailChange = function(newEvent){
+  };
+  const handleEmailChange = function(newEvent) {
     user.setEmail(inputEmail.current.value);
     console.log("email: " + inputEmail.current.value);
-  }
-  const handlePassChange = function(newEvent){
+  };
+  const handlePassChange = function(newEvent) {
     console.log("pass: " + inputPassword.current.value);
-  }
-  const handleRegister = function(newEvent){
-    axios.post("http://127.0.0.1:8000/register/", {name: inputName.current.value,
-                                          email: inputEmail.current.value,
-                                          password: inputPassword.current.value})
-          .then(function (response) {
-            console.log(response);
-            localStorage.accessToken = response.data.access;
-            auth.setAuth(true);
-            props.history.push('/profile');
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-  }
+  };
+  const handleRegister = function(newEvent) {
+    axios
+      .post("http://127.0.0.1:8000/register/", {
+        name: inputName.current.value,
+        email: inputEmail.current.value,
+        password: inputPassword.current.value
+      })
+      .then(function(response) {
+        console.log(response);
+        localStorage.accessToken = response.data.access;
+        auth.setAuth(true);
+        props.history.push("/profile");
+        alert("Registration succeeded!");
+      })
+      .catch(function(error) {
+        console.log(error);
+        if (error.response.status === 400)
+          alert("Email existed! Please use a new email address.");
+        if (error.response.status === 500)
+          alert("Please enter a valid email address.");
+      });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -172,6 +179,7 @@ export default function SignUp(props) {
           >
             Sign Up
           </Button>
+
           <Grid container justify="flex-end">
             <Grid item>
               <Link to="/signIn" variant="body2">
