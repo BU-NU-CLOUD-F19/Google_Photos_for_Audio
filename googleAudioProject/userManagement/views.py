@@ -22,11 +22,17 @@ class UserRegister(generics.CreateAPIView):
         user = UserManager(email, hash_password(password))
         tokens = get_tokens_for_user(user)
 
-        if user.check():
+        # Is email valid?
+        if user.validEmail():
+            # Is email new?
             if user.new_user():
-                user.add_user()
-                print(self.messages['auth_success'])
-                return Response(data=tokens, status=200)
+                # Is password blank?
+                if password == ""
+                    return Response(data=self.messages['auth_fail'], status=600)
+                else: 
+                    user.add_user()
+                    print(self.messages['auth_success'])
+                    return Response(data=tokens, status=200)
             else:
                 print('User already exists! ' + self.messages['auth_fail'])
                 return Response(data=self.messages['auth_fail'], status=400)
@@ -50,6 +56,7 @@ class UserLogin(generics.ListCreateAPIView):
         tokens = get_tokens_for_user(user)
         print(tokens)
 
+        # Is user existed?
         if user.new_user():
             print("Email is not registered!")
             return Response(data=self.messages['invalid'], status=500)
@@ -57,6 +64,7 @@ class UserLogin(generics.ListCreateAPIView):
             if user.success_login():
                 # login(request, user)
                 return Response(data=tokens, status=200)
+            # Is password correct?
             else:
                 print("Incorrect password!")
                 return Response(data=self.messages['invalid'], status=400)

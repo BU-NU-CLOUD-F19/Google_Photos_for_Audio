@@ -95,6 +95,8 @@ export default function SignUp(props) {
               alert("Email existed! Please use a new email address.");
             if (error.response.status === 500)
               alert("Please enter a valid email address.");
+            if (error.response.status === 600)
+              alert("Please enter your password.")
           })
   }
 

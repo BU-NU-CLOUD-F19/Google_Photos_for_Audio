@@ -64,8 +64,6 @@ class UserManager(object):
                 'password': self.password,
             }
         )
-        # print("AddUser succeeded:")
-        print(json.dumps(response, indent=4, cls=DecimalEncoder))
 
     def success_login(self):
         table = dynamodb.Table('users')
@@ -83,8 +81,7 @@ class UserManager(object):
             print(user)
             provided_password = user.get('password')
             return verify_password(provided_password, self.password)
-            # print(json.dumps(user, indent=4, cls=DecimalEncoder))
 
     # Check email validation 
-    def check(self):  
+    def validEmail(self):  
         return re.search(regex,self.email)
