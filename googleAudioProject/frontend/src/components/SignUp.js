@@ -87,9 +87,14 @@ export default function SignUp(props) {
             localStorage.accessToken = response.data.access;
             auth.setAuth(true);
             props.history.push('/profile');
+            alert("Registration succeeded!");
           })
           .catch(function (error) {
             console.log(error);
+            if (error.response.status === 400)
+              alert("Email existed! Please use a new email address.");
+            if (error.response.status === 500)
+              alert("Please enter a valid email address.");
           })
   }
 

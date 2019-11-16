@@ -5,8 +5,10 @@ import json
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 import hashlib, binascii, os
-
-
+import re 
+  
+regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+  
 def hash_password(password):
     """Hash a password for storing."""
     salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
@@ -83,8 +85,6 @@ class UserManager(object):
             return verify_password(provided_password, self.password)
             # print(json.dumps(user, indent=4, cls=DecimalEncoder))
 
-
-
-
-
-
+    # Check email validation 
+    def check(self):  
+        return re.search(regex,self.email)

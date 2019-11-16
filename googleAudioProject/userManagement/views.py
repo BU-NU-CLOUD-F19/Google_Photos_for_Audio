@@ -22,14 +22,16 @@ class UserRegister(generics.CreateAPIView):
         user = UserManager(email, hash_password(password))
         tokens = get_tokens_for_user(user)
 
-        if user.new_user():
-            user.add_user()
-            # TODO: create a new user inf files database
-            print(self.messages['auth_success'])
-            return Response(data=tokens, status=200)
-        else:
-            print('User already exists! ' + self.messages['auth_fail'])
-            return Response(data=self.messages['auth_fail'], status=400)
+        if user.check():
+            if user.new_user():
+                user.add_user()
+                print(self.messages['auth_success'])
+                return Response(data=tokens, status=200)
+            else:
+                print('User already exists! ' + self.messages['auth_fail'])
+                return Response(data=self.messages['auth_fail'], status=400)
+        else: 
+            return Response(data=self.messages['auth_fail'], status=500)
 
 
 class UserLogin(generics.ListCreateAPIView):
@@ -48,9 +50,9 @@ class UserLogin(generics.ListCreateAPIView):
         tokens = get_tokens_for_user(user)
         print(tokens)
 
-        # TODO: add functions for getting user file info
         if user.new_user():
             print("Email is not registered!")
+            return Response(data=self.messages['invalid'], status=500)
         else:
             if user.success_login():
                 # login(request, user)
