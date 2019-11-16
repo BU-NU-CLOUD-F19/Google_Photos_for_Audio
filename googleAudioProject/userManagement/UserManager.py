@@ -5,7 +5,9 @@ import json
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 import hashlib, binascii, os
+import re
 
+regex = '^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -29,14 +31,14 @@ def verify_password(stored_password, provided_password):
 
 
 # Helper class to convert a DynamoDB item to JSON.
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            if abs(o) % 1 > 0:
-                return float(o)
-            else:
-                return int(o)
-        return super(DecimalEncoder, self).default(o)
+# class DecimalEncoder(json.JSONEncoder):
+#     def default(self, o):
+#         if isinstance(o, decimal.Decimal):
+#             if abs(o) % 1 > 0:
+#                 return float(o)
+#             else:
+#                 return int(o)
+#         return super(DecimalEncoder, self).default(o)
 
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
@@ -63,7 +65,7 @@ class UserManager(object):
             }
         )
         # print("AddUser succeeded:")
-        print(json.dumps(response, indent=4, cls=DecimalEncoder))
+        # print(json.dumps(response, indent=4, cls=DecimalEncoder))
 
     def success_login(self):
         table = dynamodb.Table('users')
@@ -84,6 +86,9 @@ class UserManager(object):
             # print(json.dumps(user, indent=4, cls=DecimalEncoder))
 
 
+    # Check email validation 
+    def check(self):  
+        return re.search(regex,self.email)
 
 
 

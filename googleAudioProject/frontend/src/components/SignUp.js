@@ -90,6 +90,12 @@ export default function SignUp(props) {
           })
           .catch(function (error) {
             console.log(error);
+            if (error.response.status === 521)
+              alert("Email existed! Please use a new email address.");
+            if (error.response.status === 522)
+              alert("Please enter a valid email address.");
+            if (error.response.status === 520)
+              alert("Please enter your password.");
           })
   }
 

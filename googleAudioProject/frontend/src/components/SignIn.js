@@ -86,6 +86,16 @@ export default function SignIn(props) {
           })
           .catch(function (error) {
             console.log(error);
+            switch (error.response.status) {
+              case 524:
+                alert('Incorrect password!');
+                break;
+              case 523:
+                alert("Email address doesn't exist! Please register first or enter a valid email address.");
+                break;
+              default:
+                break;
+            }
           })
   }
 
