@@ -10,7 +10,8 @@ export default class UserProvider extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {userEmail: "email"};
+    this.state = {userEmail: "",
+                  isAuthenticated: false};
     console.log(this.state.userEmail);
   }
 
@@ -22,7 +23,8 @@ export default class UserProvider extends Component {
     return (
         <UserContext.Provider value={
           {state: this.state,
-          setEmail: (value) => this.setState({userEmail: value})}}>
+          setEmail: (value) => this.setState({userEmail: value, isAuthenticated: this.state.isAuthenticated}),
+          setAuth: (value) => this.setState({userEmail: this.state.userEmail, isAuthenticated: value})}}>
             {this.props.children}
         </UserContext.Provider>
     )
