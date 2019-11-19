@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+
+class CustomFile(models.Model):
+    '''
+    Custom user management model.
+    '''
+
+    filename = models.CharField(max_length=100)
+

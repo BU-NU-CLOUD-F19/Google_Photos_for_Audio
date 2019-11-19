@@ -19,7 +19,7 @@ export default class NavigationBar extends Component {
             <Nav className="ml-auto">
                 <Nav.Link as={Link} to="/">Home</Nav.Link>
                 <Nav.Link as={Link} to="/signIn">Sign In</Nav.Link>
-                <Nav.Link as={Link} to="/other">Other</Nav.Link>
+                <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
             </Nav>
             </Navbar.Collapse>
         </Navbar>

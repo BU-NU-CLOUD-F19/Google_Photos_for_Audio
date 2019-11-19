@@ -100,3 +100,4 @@ yarn-error.log*
 /.changelog
 .npm/
 package-lock.json
+.pem

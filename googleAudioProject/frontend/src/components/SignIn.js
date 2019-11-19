@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { Link } from "react-router-dom";
-// import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -14,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from "axios";
+import { UserContext } from "./UserProvider"
+import { AuthContext } from "./AuthProvider"
+
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -58,30 +60,48 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
+  const user = useContext(UserContext);
+  const auth = useContext(AuthContext);
 
   let inputEmail = React.createRef();
   let inputPassword = React.createRef();
 
-  var handleEmailChange = function(newEvent){
-    console.log("email: " + inputEmail.current.value)
+  const handleEmailChange = function(){
+    user.setEmail(inputEmail.current.value);
+    console.log("email: " + inputEmail.current.value);
   }
-  var handlePassChange = function(newEvent){
-    console.log("pass: " + inputPassword.current.value)
+  const handlePassChange = function(){
+    console.log("pass: " + inputPassword.current.value);
   }
-  var handleLogin = function(newEvent){
+  const handleLogin = function(){
     axios.post("http://127.0.0.1:8000/login/", {email: inputEmail.current.value,
                                                 password: inputPassword.current.value})
-          .then(function (w) {
+          .then(function (response) {
             console.log(response);
+            localStorage.accessToken = response.data.access;
+            auth.setAuth(true);
+            user.setAuth(true);
+            props.history.push('/profile');
           })
           .catch(function (error) {
             console.log(error);
+            switch (error.response.status) {
+              case 524:
+                alert('Incorrect password!');
+                break;
+              case 523:
+                alert("Email address doesn't exist! Please register first or enter a valid email address.");
+                break;
+              default:
+                break;
+            }
           })
   }
 
   return (
+
     <Container component="main" maxWidth="xs">
       {/* <CssBaseline /> */}
       <div className={classes.paper}>
@@ -122,16 +142,16 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
+
           <Button
             onClick={handleLogin}
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
             Sign In
           </Button>
+
           <Grid container>
             <Grid item xs>
               <Link to="#" variant="body2">

@@ -1,35 +1,44 @@
 from django.contrib.auth import login
 from .serializers import UserSerializer
 from .models import CustomUser
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
 from .UserManager import UserManager, hash_password
-#from .FileManager import FileManager
+from rest_framework import generics
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserRegister(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     messages = {
-        'auth_success': 'User created.',
-        'auth_fail': 'User not created.',
+        "auth_success": "New user created.",
+        "auth_fail": "New user not created.",
     }
 
     def post(self, request, *args, **kwargs):
-        email = request.data['email']
-        password = request.data['password']
+        email = request.data["email"]
+        password = request.data["password"]
         user = UserManager(email, hash_password(password))
-        print(user.password)
+        tokens = get_tokens_for_user(user)
 
-        if user.new_user():
-            user.add_user()
-            # TODO: create a new user inf files database
-            print(self.messages['auth_success'])
-            return Response(data=self.messages['auth_success'], status=200)
+        # Is email valid?
+        if user.check():
+            # Is email new?
+            if user.new_user():
+                # Is password blank?
+                if password == "":
+                    print("Null password! " + self.messages["auth_fail"])
+                    return Response(data=self.messages["auth_fail"], status=520)
+                else:
+                    user.add_user()
+                    print(self.messages["auth_success"])
+                    return Response(data=tokens, status=200)
+            else:
+                print("User already exists! " + self.messages["auth_fail"])
+                return Response(data=self.messages["auth_fail"], status=521)
         else:
-            print('User existed! ' + self.messages['auth_fail'])
-            return Response(data=self.messages['auth_fail'], status=400)
+            return Response(data=self.messages["auth_fail"], status=522)
 
 
 class UserLogin(generics.ListCreateAPIView):
@@ -37,60 +46,50 @@ class UserLogin(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
     messages = {
-        'success': "User successfully logged in.",
-        'invalid': "Authentication failed.",
+        "success": "User successfully logged in.",
+        "invalid": "Authentication failed.",
     }
 
     def post(self, request, *args, **kwargs):
-        email = request.data['email']
-        password = request.data['password']
+        email = request.data["email"]
+        password = request.data["password"]
         user = UserManager(email, password)
-        # TODO: add functions for getting user file info
+        tokens = get_tokens_for_user(user)
+        print(tokens)
+
         if user.new_user():
             print("Email is not registered!")
+            return Response(data=self.messages["invalid"], status=523)
         else:
             if user.success_login():
-                login(request, user)
-                return Response(data=self.messages['success'], status=200)
+                # login(request, user)
+                return Response(data=tokens, status=200)
             else:
                 print("Incorrect password!")
-                return Response(data=self.messages['invalid'], status=400)
+                return Response(data=self.messages["invalid"], status=524)
 
 
-class UserLogout():
+class UserLogout:
     pass
 
 
 class UserDetails(generics.RetrieveAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    lookup_field="email"
-
-    @api_view(["GET"])
-    def user_details(request, email):
-        user = CustomUser.objects.get(email=email)
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+    pass
 
 
 class UserUpdate(generics.RetrieveUpdateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-    @api_view(["GET", "PUT"])
-    def user_update(request, pk):
-        user = CustomUser.objects.get(id=pk)
-        if request.method == "PUT":
-            serializer = UserSerializer(user, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response({"error": serializer.errors, "error": True})
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+    pass
 
 
 class UserList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        "refresh": str(refresh),
+        "access": str(refresh.access_token),
+    }

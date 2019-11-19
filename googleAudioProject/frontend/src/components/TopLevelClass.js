@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { AuthContext } from "./AuthProvider"
+import { UserContext } from "./UserProvider"
 
 
 export default class TopLevelClass extends Component {
@@ -10,7 +11,7 @@ export default class TopLevelClass extends Component {
 
   render() {
     return (
-      <AuthContext.Consumer> 
+      <UserContext.Consumer>
       { (context) => (
         <div
         style={{
@@ -19,12 +20,12 @@ export default class TopLevelClass extends Component {
             transform: 'translate(-50%, -50%)'
         }}
         >
-        {context.state.isLoggedIn? 'Logged in!': 'Welcome to Google Photos for Audio!'}
+        {context.state.isAuthenticated? 'User authenticated!': 'Welcome to Google Photos for Audio!'}
         </div>
         )
       }
-      
-      </AuthContext.Consumer>
+
+      </UserContext.Consumer>
     );
   }
 }
