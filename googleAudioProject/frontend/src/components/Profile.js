@@ -82,6 +82,10 @@ const useStyles = theme => ({
   },
 });
 
+var divStyle = {
+    textAlign:'right'
+};
+
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -168,6 +172,9 @@ class Profile extends Component {
       })
     )
   }
+  refreshFiles = async (e) => {
+    await this.PullFiles();
+  }
 
   async componentDidMount() {
     let user = this.context;
@@ -216,6 +223,14 @@ class Profile extends Component {
                     {"Logout"}
                   </Link>
                   <br />
+                  <div>
+                      <Button variant="contained"
+                      component="span"
+                      size="small"
+                      color="default"
+                      style={{justifyContent: 'right'}}
+                      onClick={()=> {this.refreshFiles()}}>Refresh table</Button>
+                  </div>
                   <Grid
                     container
                     direction="row"
