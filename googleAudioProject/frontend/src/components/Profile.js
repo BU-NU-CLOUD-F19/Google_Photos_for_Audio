@@ -103,30 +103,58 @@ class Profile extends Component {
   }
 
   filterSearchFiles = (e) => {
-    let keyword = e.target.value.toLowerCase();
-    let filterFiles = [];
+    let keywords = e.target.value.toLowerCase();
+    var keyArray = keywords.split(' ');
     let loginState = this.state.isLoggedIn;
     let allFiles = this.state.files;
+    let allFilterFiles = []
+    for (let n = 0; n < keyArray.length; n++) {
+    // first layer, go through given key words
+      let keyword = keyArray[n];
+      let filterFiles = [];
+      for (let i = 0; i < allFiles.length; i++) {
+      // second layer, go through files
+        let keywordInFile = false;
+        let currentFile = allFiles[i];
+        for (let j = 0; j < currentFile['key_words'].length; j++) {
+        // third  layer, go through key words in dynamoDB
+          let lowerString = currentFile['key_words'][j];
+          // if not the last keyword, given keywords have to match
+          if (n!=keyArray.length-1){
+            if (lowerString==keyword) {
+              keywordInFile = true;
+              break;
+            }
+          }
+          // if is the last keyword, given keyword has to involved
+          else{
+            if (lowerString.includes(keyword)) {
+              keywordInFile = true;
+              break;
+            }
+          }
+        }
 
-    for (let i = 0; i < allFiles.length; i++) {
-      let keywordInFile = false;
-      let currentFile = allFiles[i];
-      for (let j = 0; j < currentFile['key_words'].length; j++) {
-        let lowerString = currentFile['key_words'][j].toLowerCase();
-        if (lowerString.includes(keyword)) {
-          keywordInFile = true;
-          break;
+        if (keywordInFile) {
+          filterFiles.push(currentFile);
         }
       }
-
-      if (keywordInFile) {
-        filterFiles.push(currentFile);
+      if (n==0){
+        allFilterFiles = filterFiles;
+      }
+      if (filterFiles==[]){
+        allFilterFiles = [];
+        break;
+      }
+      else{
+      // find the intersection of two list
+        allFilterFiles = allFilterFiles.filter(v => filterFiles.includes(v))
       }
     }
     
     this.setState({isLoggedIn: loginState,
                    files: allFiles,
-                   filteredFiles: filterFiles});
+                   filteredFiles: allFilterFiles});
   }
 
   PullFiles = async () => {
