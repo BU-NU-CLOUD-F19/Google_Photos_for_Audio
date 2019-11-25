@@ -223,40 +223,6 @@ class Profile extends Component {
   //     };
   // }
 
-  render() {
-    let user = this.context;
-    const { classes } = this.props;
-    console.log(this.state.files);
-
-    let content;
-    if (this.state.isLoggedIn) {
-      content = <div className={classes.paper}>
-                  <Avatar className={classes.avatar}>
-                    <AccountCircleOutlinedIcon />
-                  </Avatar>
-                  <Typography component="h5">
-                    {user.state.userEmail}
-                  </Typography>
-      console.log(e),
-      console.log(e.target.files[0]),
-      ReactS3.uploadFile(e.target.files[0], config)
-      .then((data)=>{
-        console.log(data);
-        alert("File processing.");
-      })
-      .catch((err)=>{
-        alert(err);
-      })
-    )
-  }
-
-
-
-  async componentDidMount() {
-    let user = this.context;
-    this.setState({isLoggedIn: user.state.isAuthenticated, files: [], filteredFiles: []});
-    await this.PullFiles();
-  }
 
   render() {
     let user = this.context;
@@ -265,14 +231,15 @@ class Profile extends Component {
     const { classes } = this.props;
     console.log(this.state.files);
 
+
     let content;
     if (this.state.isLoggedIn) {
       content = <div className={classes.paper}>
                   <Avatar className={classes.avatar}>
                     <AccountCircleOutlinedIcon />
                   </Avatar>
-                  <Typography component="h5">
-                    {user.state.userEmail}
+                  <Typography component="h4">
+                      {"Welcome, " + user.state.userEmail + "!"}
                   </Typography>
 
                   <input
@@ -309,100 +276,7 @@ class Profile extends Component {
                       style={{justifyContent: 'right'}}
                       onClick={()=> {this.refreshFiles()}}>Refresh table</Button>
                   </div>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={1}
-                  >
-                    <Grid item xs={7}>
-                      <TextField
-                        // inputRef={this.inputSearchValue}
-                        onChange={this.filterSearchFiles}
-                        className={classes.textField}
-                        id="search"
-                        label="Search your files"
-                        type="search"
-                        fullWidth
-                        variant="outlined"
-                      />
-                    </Grid>
-                    <Grid item xs={3}>
-                      <TextField
-                        // inputRef={this.inputSearchType}
-                        onChange={this.filterSearchFiles}
-                        className={classes.textField}
-                        select
-                        value=''
-                        id="search-select"
-                        label="Search by"
-                        fullWidth
-                        variant="outlined"
-                      >
-                        <MenuItem value={"filename"}>Filename</MenuItem>
-                        <MenuItem value={"keyword"}>Keyword</MenuItem>
-                      </TextField>
-                    </Grid>
-                    <Grid item xs={2}>
-                      <Button
-                        // onClick={this.handleSearchSubmit}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Search
-                      </Button>
-                    </Grid>
-                  </Grid>
-
-                  {/* <Table striped bordered hover size="sm"> */}
-                  <div>
-                  {this.state.filteredFiles.map((file, index) => {
-                        return (
-                          <ExpansionPanel key={index}>
-                            <ExpansionPanelSummary
-                              expandIcon={<ExpandMoreIcon />}
-                              aria-controls="panel1a-content"
-                              id="panel1a-header"
-                            >
-                              <Typography>{file['file_name']}</Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <div>
-                                    <ReactAudioPlayer
-                                        //autoPlay
-                                        controls
-                                        src={"https://googleaudio.s3.us-east-2.amazonaws.com/" + new_email + "/"+ file['file_name']}
-                                    />
-                                <div>
-                                  <Typography>
-                                    Transcript
-                                  </Typography>
-                                </div>
-                                <div>
-                                  <Typography>
-                                    {file['transcript']}
-                                  </Typography>
-                                </div>
-                              </div>
-                            </ExpansionPanelDetails>
-                          </ExpansionPanel>)
-                      })}
-
-                  </div>
-                </div>;
-    } else {
-      content = <div className={classes.paper}>
-                  <Avatar className={classes.avatar}>
-                    <WarningTwoToneIcon />
-                  </Avatar>
-                  <Link
-                    to="/"
-                    onClick={this.handleLogout}
-                    variant="body2">
-                    {"Logout"}
-                  </Link>
-                  <br />
+                 <br />
                   <Grid
                     container
                     direction="row"
