@@ -35,7 +35,7 @@ const routing = (
             <Route path="/signUp" component={SignUp} />
             <Route path="/profile" component={Profile} />
             <Route path="/other" component={Other} />
-            <Route path="/homepage" component={HomePage} />
+            <Route exact path="/homepage" component={HomePage} />
             <Route component={NotFound} />
         </Switch>
     </Router>
