@@ -3,13 +3,22 @@ import ReactDOM from "react-dom";
 import { Navbar, Nav, Styles, NavItem, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
+import { UserContext } from "./UserProvider";
 
 export default class NavigationBar extends Component {
     constructor(props) {
         super(props);
     }
 
+    handleLogout = () => {
+        let user = this.context;
+        delete localStorage.accessToken;
+        user.setAuth(false);
+    }
+
     render() {
+        let user = this.context;
+
         return (
         <div>
         <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
@@ -18,8 +27,9 @@ export default class NavigationBar extends Component {
             <Navbar.Collapse>
             <Nav className="ml-auto">
                 <Nav.Link as={Link} to="/">Home</Nav.Link>
-                <Nav.Link as={Link} to="/signIn">Sign In</Nav.Link>
                 <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                {user.state.isAuthenticated? <Nav.Link as={Link} onClick={this.handleLogout} to="/">Sign Out</Nav.Link> : 
+                                             <Nav.Link as={Link} to="/signIn">Sign In</Nav.Link>}
             </Nav>
             </Navbar.Collapse>
         </Navbar>
@@ -28,6 +38,7 @@ export default class NavigationBar extends Component {
     }
 }
 
+NavigationBar.contextType = UserContext;
 
 // import React from 'react'
 // import AppBar from '@material-ui/core/AppBar'
