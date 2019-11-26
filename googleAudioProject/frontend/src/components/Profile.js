@@ -200,7 +200,7 @@ class Profile extends Component {
       ReactS3.uploadFile(e.target.files[0], config)
       .then((data)=>{
         console.log(data);
-        alert("File processing.");
+        alert("File processing. Transcription takes some time. Please refresh table after a few minutes.");
       })
       .catch((err)=>{
         alert(err);
