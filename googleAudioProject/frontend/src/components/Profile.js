@@ -124,7 +124,7 @@ class Profile extends Component {
         let currentFile = allFiles[i];
         for (let j = 0; j < currentFile['key_words'].length; j++) {
         // third  layer, go through key words in dynamoDB
-          let lowerString = currentFile['key_words'][j];
+          let lowerString = currentFile['key_words'][j].toLowerCase();
           // if not the last keyword, given keywords have to match
           if (n!=keyArray.length-1){
             if (lowerString==keyword) {
@@ -148,7 +148,7 @@ class Profile extends Component {
       if (n==0){
         allFilterFiles = filterFiles;
       }
-      if (filterFiles==[]){
+      if (filterFiles.length == 0){
         allFilterFiles = [];
         break;
       }
@@ -268,15 +268,6 @@ class Profile extends Component {
     let content;
     if (this.state.isLoggedIn) {
       content = <div className={classes.paper}>
-                  {/* <div style={{width: '100%', justifyContent: 'right'}}>
-                    <Button
-                      component={ Link }
-                      to="/"
-                      variant="contained"
-                      onClick={this.handleLogout}>
-                      {"Logout"}
-                    </Button>
-                  </div> */}
                   <Avatar className={classes.avatar}>
                     <AccountCircleOutlinedIcon />
                   </Avatar>
@@ -302,16 +293,6 @@ class Profile extends Component {
                       Upload Audio
                     </Button>
                   </label>
-
-                  <div>
-                      {/* <Button variant="contained"
-                      component="span"
-                      // size="small"
-                      color="default"
-                      style={{justifyContent: 'right'}}
-                      startIcon={<RefreshIcon />}
-                      onClick={()=> {this.refreshFiles()}}></Button> */}
-                  </div>
                  <br />
                   <Grid
                     container
@@ -349,13 +330,6 @@ class Profile extends Component {
                       </TextField>
                     </Grid>
                     <Grid item xs={1}>
-                      {/* <Button
-                        // onClick={this.handleSearchSubmit}
-                        variant="contained"
-                        color="primary"
-                      >
-                        Search
-                      </Button> */}
                       <IconButton onClick={()=> {this.refreshFiles()}}>
                         <RefreshIcon />
                       </IconButton>
@@ -381,13 +355,8 @@ class Profile extends Component {
                                         controls
                                         src={"https://googleaudio.s3.us-east-2.amazonaws.com/" + new_email + "/"+ file['file_name']}
                                     />
-                                {/* <div>
-                                  <Typography>
-                                    Transcript
-                                  </Typography>
-                                </div> */}
                                 <div>
-                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', borderBottom: 0, boxShadow: 'none'}}>
+                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}}>
                                     <ExpansionPanelSummary
                                       aria-controls="panel1a-content"
                                       id="panel1a-header"
@@ -409,9 +378,6 @@ class Profile extends Component {
                                       {file['key_words'].join(', ')}
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>
-                                  {/* <Typography>
-                                    {file['transcript']}
-                                  </Typography> */}
                                 </div>
                               </div>
                             </ExpansionPanelDetails>
