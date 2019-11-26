@@ -32,6 +32,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import IconButton from '@material-ui/core/IconButton';
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -80,6 +82,9 @@ const useStyles = theme => ({
   },
   input: {
     display: 'none',
+  },
+  floatComponent: {
+    flexGrow: 1,
   },
 });
 
@@ -235,6 +240,15 @@ class Profile extends Component {
     let content;
     if (this.state.isLoggedIn) {
       content = <div className={classes.paper}>
+                  {/* <div style={{width: '100%', justifyContent: 'right'}}>
+                    <Button
+                      component={ Link }
+                      to="/"
+                      variant="contained"
+                      onClick={this.handleLogout}>
+                      {"Logout"}
+                    </Button>
+                  </div> */}
                   <Avatar className={classes.avatar}>
                     <AccountCircleOutlinedIcon />
                   </Avatar>
@@ -261,20 +275,14 @@ class Profile extends Component {
                     </Button>
                   </label>
 
-                  <Link
-                    to="/"
-                    onClick={this.handleLogout}
-                    variant="body2">
-                    {"Logout"}
-                  </Link>
-                  <br />
                   <div>
-                      <Button variant="contained"
+                      {/* <Button variant="contained"
                       component="span"
-                      size="small"
+                      // size="small"
                       color="default"
                       style={{justifyContent: 'right'}}
-                      onClick={()=> {this.refreshFiles()}}>Refresh table</Button>
+                      startIcon={<RefreshIcon />}
+                      onClick={()=> {this.refreshFiles()}}></Button> */}
                   </div>
                  <br />
                   <Grid
@@ -284,7 +292,7 @@ class Profile extends Component {
                     alignItems="center"
                     spacing={1}
                   >
-                    <Grid item xs={7}>
+                    <Grid item xs={8}>
                       <TextField
                         // inputRef={this.inputSearchValue}
                         onChange={this.filterSearchFiles}
@@ -312,14 +320,17 @@ class Profile extends Component {
                         <MenuItem value={"keyword"}>Keyword</MenuItem>
                       </TextField>
                     </Grid>
-                    <Grid item xs={2}>
-                      <Button
+                    <Grid item xs={1}>
+                      {/* <Button
                         // onClick={this.handleSearchSubmit}
                         variant="contained"
                         color="primary"
                       >
                         Search
-                      </Button>
+                      </Button> */}
+                      <IconButton onClick={()=> {this.refreshFiles()}}>
+                        <RefreshIcon />
+                      </IconButton>
                     </Grid>
                   </Grid>
 
@@ -342,15 +353,37 @@ class Profile extends Component {
                                         controls
                                         src={"https://googleaudio.s3.us-east-2.amazonaws.com/" + new_email + "/"+ file['file_name']}
                                     />
-                                <div>
+                                {/* <div>
                                   <Typography>
                                     Transcript
                                   </Typography>
-                                </div>
+                                </div> */}
                                 <div>
-                                  <Typography>
+                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', borderBottom: 0, boxShadow: 'none'}}>
+                                    <ExpansionPanelSummary
+                                      aria-controls="panel1a-content"
+                                      id="panel1a-header"
+                                    >
+                                      <Typography>{"Transcript"}</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                      {file['transcript']}
+                                    </ExpansionPanelDetails>
+                                  </ExpansionPanel>
+                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}}>
+                                    <ExpansionPanelSummary
+                                      aria-controls="panel1a-content"
+                                      id="panel1a-header"
+                                    >
+                                      <Typography>{"Key Words"}</Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                      {file['key_words'].join(', ')}
+                                    </ExpansionPanelDetails>
+                                  </ExpansionPanel>
+                                  {/* <Typography>
                                     {file['transcript']}
-                                  </Typography>
+                                  </Typography> */}
                                 </div>
                               </div>
                             </ExpansionPanelDetails>
