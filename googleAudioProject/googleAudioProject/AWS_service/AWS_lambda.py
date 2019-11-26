@@ -18,6 +18,22 @@ def lambda_handler(event, context):
         bucket_name = str(file_obj["s3"]["bucket"]["name"])
         file_name = str(file_obj["s3"]["object"]["key"])
         user_email = file_name.split('/')[0]
+
+        # terminate processing if file already existed
+        table = dynamodb.Table('Audio')
+        response = table.query(
+            KeyConditionExpression=Key('email').eq(user_email)
+        )
+        count = response['Count']
+        if count == 1:
+            audio_list = response['Items'][0]['audio_files']
+            for audio in audio_list:
+                if audio['file_name'] == file_name.split('/')[1]:
+                    return {
+                        'statusCode': 500,
+                        'body': json.dumps('Uploading failed. File already existed')
+                    }
+
         s3_uri = create_uri(bucket_name, file_name)
         file_type = file_name.split('/')[1].split('.')[1]
         job_name = context.aws_request_id
@@ -78,10 +94,9 @@ def lambda_handler(event, context):
                 UpdateExpression='SET audio_files = :val1',
                 ExpressionAttributeValues={
                 ':val1': audio_list
-            }
-        )
-
-    return {
+                }
+            )
+        return {
         'statusCode': 200,
         'body': json.dumps('Transcript has been stored into DynamoDB!')
-    }
+        }
