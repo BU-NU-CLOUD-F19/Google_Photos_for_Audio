@@ -1,6 +1,6 @@
-var AWS = {
-    accessKeyId :'AKIAVJ45X5OXRVEHPRVM',
-    secretAccessKey :'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'
+var AWS_credentials = {
+    accessKeyId :'',
+    secretAccessKey :''
 };
 // Remember do not upload the key info
-export {AWS};
+export {AWS_credentials};
