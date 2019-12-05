@@ -15,10 +15,15 @@ import WarningTwoToneIcon from '@material-ui/icons/WarningTwoTone';
 import axios from "axios";
 import { UserContext } from "./UserProvider";
 import { AuthContext } from "./AuthProvider";
-// import { Table } from "react-bootstrap";
-import { AWS } from '../../AWS_keys';
+import { AWS_credentials } from '../../AWS_keys';
+
 import ReactS3 from 'react-s3';
+import S3FileUpload from 'react-s3';
+import { deleteFile } from 'react-s3';
 import ReactAudioPlayer from 'react-audio-player';
+import ReactPlayer from 'react-player';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -34,6 +39,7 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import IconButton from '@material-ui/core/IconButton';
+import Input from "@material-ui/core/Input";
 
 
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
@@ -88,9 +94,11 @@ const useStyles = theme => ({
   },
 });
 
+
 var divStyle = {
     textAlign:'right'
 };
+
 
 class Profile extends Component {
   constructor(props) {
@@ -126,8 +134,8 @@ class Profile extends Component {
         // third  layer, go through key words in dynamoDB
           let lowerString = currentFile['key_words'][j].toLowerCase();
           // if not the last keyword, given keywords have to match
-          if (n!=keyArray.length-1){
-            if (lowerString==keyword) {
+          if (n!==keyArray.length-1){
+            if (lowerString===keyword) {
               keywordInFile = true;
               break;
             }
@@ -145,10 +153,10 @@ class Profile extends Component {
           filterFiles.push(currentFile);
         }
       }
-      if (n==0){
+      if (n===0){
         allFilterFiles = filterFiles;
       }
-      if (filterFiles.length == 0){
+      if (filterFiles.length === 0){
         allFilterFiles = [];
         break;
       }
@@ -190,8 +198,8 @@ class Profile extends Component {
       bucketName: 'googleaudio',
       dirName: new_email, /* optional */
       region: 'us-east-2',
-      accessKeyId: AWS.accessKeyId,
-      secretAccessKey: AWS.secretAccessKey,
+      accessKeyId: AWS_credentials.accessKeyId,
+      secretAccessKey: AWS_credentials.secretAccessKey,
     }
     return(
       console.log(e),
@@ -200,13 +208,39 @@ class Profile extends Component {
       ReactS3.uploadFile(e.target.files[0], config)
       .then((data)=>{
         console.log(data);
-        alert("File processing. Transcription takes some time. Please refresh table after a few minutes.");
+        alert("File processing...\n\n" +
+            "It will take some time to finish the transcription. " +
+            "Please click on the REFRESH button after a few minutes to see the updated file list.");
       })
       .catch((err)=>{
         alert(err);
       })
     )
   }
+
+  deleteFiles = (filename) => {
+    let user = this.context;
+    let user_email = user.state.userEmail;
+    let new_email = user_email.replace('@', '__');
+
+    var AWS = require('aws-sdk');
+    AWS.config.update({region: 'us-west-2', credentials: AWS_credentials});
+
+    var s3 = new AWS.S3();
+    var params = {
+      Bucket: 'googleaudio', /* required */
+      Key: new_email + '/' + filename, /* required */
+    };
+
+    return(
+      s3.deleteObject(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else     console.log(data);           // successful response
+      })
+
+    )
+  }
+
   refreshFiles = async (e) => {
     await this.PullFiles();
   }
@@ -216,45 +250,6 @@ class Profile extends Component {
     this.setState({isLoggedIn: user.state.isAuthenticated, files: [], filteredFiles: []});
     await this.PullFiles();
   }
-  // onRead = () => {
-  //     let user = this.context;
-  //     let user_email = user.state.userEmail;
-  //     let new_email = user_email.replace('@', '__');
-  //     AWS.config.update({
-  //       region: 'us-east-2',
-  //       endpoint: 'dynamodb.us-east-2.amazonaws.com',
-  //       accessKeyId: AWS.accessKeyId,
-  //       secretAccessKey: AWS.secretAccessKey,
-  //       });
-  //     var dynamodb = new AWS.DynamoDB();
-  //     var params = {
-  //         ExpressionAttributeValues: {
-  //             ":v1": {
-  //                 S: new_email,
-  //             }},
-  //         KeyConditionExpression: "email = :v1",
-  //         ProjectionExpression: "audio_files",
-  //         TableName: "Audio"
-  //     };
-  //     dynamodb.query(params, function(err, data))
-  //         .then((data)=> {
-  //             console.log(data);
-  //             audio_list = data.items()
-  //
-  //       count = response['Count']
-  //       if count == 1:
-  //           audio_list = response['Items'][0]['audio_files']
-  //           for audio in audio_list:
-  //               if audio['file_name'] == file_name.split('/')[1]:
-  //                   return {
-  //                       'statusCode': 500,
-  //                       'body': json.dumps('Uploading failed. File already existed')
-  //         })
-  //         .catch((err)=>{
-  //             alert(err);
-  //         })
-  //     };
-  // }
 
 
   render() {
@@ -263,7 +258,6 @@ class Profile extends Component {
     let new_email = user_email.replace('@', '__');
     const { classes } = this.props;
     console.log(this.state.files);
-
 
     let content;
     if (this.state.isLoggedIn) {
@@ -274,6 +268,7 @@ class Profile extends Component {
                   <Typography component="h4">
                       {"Welcome, " + user.state.userEmail + "!"}
                   </Typography>
+                  <br />
 
                   <input
                     id="upload-button"
@@ -290,10 +285,11 @@ class Profile extends Component {
                       component="span"
                       color="primary"
                     >
-                      Upload Audio
+                      Upload File
                     </Button>
                   </label>
                  <br />
+
                   <Grid
                     container
                     direction="row"
@@ -336,26 +332,71 @@ class Profile extends Component {
                     </Grid>
                   </Grid>
 
-                  {/* <Table striped bordered hover size="sm"> */}
                   <div>
                   {this.state.filteredFiles.map((file, index) => {
-                        return (
+                    let fileType = file['file_name'].split('.')[1]
+                    let isAudio = (fileType === "mp3" || fileType === 'wav' || fileType === 'wmv')
+
+                    return (
                           <ExpansionPanel key={index}>
                             <ExpansionPanelSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1a-content"
-                              id="panel1a-header"
-                            >
+                              id="panel1a-header">
                               <Typography>{file['file_name']}</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <div>
-                                    <ReactAudioPlayer
+
+                              <Grid
+                                    container
+                                    direction="column"
+                                    justify="flex-start"
+                                    alignItems="flex-start"
+                                    spacing={1}
+                              >
+                                  <Grid>
+                                    {(isAudio) ?
+                                        <ReactAudioPlayer
                                         //autoPlay
                                         controls
-                                        src={"https://googleaudio.s3.us-east-2.amazonaws.com/" + new_email + "/"+ file['file_name']}
-                                    />
-                                <div>
+                                        src={"https://googleaudio.s3.us-east-2.amazonaws.com/" + new_email + "/" + file['file_name']}
+                                        /> :
+                                        <ReactPlayer
+                                            url={'https://googleaudio.s3.us-east-2.amazonaws.com/' + new_email + '/' + file['file_name']}
+                                            className='react-player'
+                                            //playing
+                                            controls
+                                            width='100%'
+                                            height='100%'
+                                          />
+                                    }
+                                  </Grid>
+                                <Grid>
+                                 <br />
+                                  <Grid
+                                        container
+                                        direction="row"
+                                        justify="flex-start"
+                                        alignItems="center"
+                                        spacing={1}
+                                      >
+                                    <Grid>
+                                      <Button
+                                          color="secondary"
+                                          aria-label="delete"
+                                          onClick={this.deleteFiles.bind(this,file['file_name'])}>
+                                        <DeleteIcon />
+                                      </Button>
+                                    </Grid>
+                                    <Grid>
+                                      <Typography color={"secondary"}> {"---->> Caution! The deletion on click CANNOT be reverted!"}</Typography>
+                                    </Grid>
+                                  </Grid>
+                                  </Grid>
+                                <Grid>
+                                  <br />
+                                </Grid>
+                                <Grid>
                                   <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}}>
                                     <ExpansionPanelSummary
                                       aria-controls="panel1a-content"
@@ -372,18 +413,17 @@ class Profile extends Component {
                                       aria-controls="panel1a-content"
                                       id="panel1a-header"
                                     >
-                                      <Typography>{"Key Words"}</Typography>
+                                      <Typography>{"Keywords"}</Typography>
                                     </ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                       {file['key_words'].join(', ')}
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>
-                                </div>
-                              </div>
-                            </ExpansionPanelDetails>
-                          </ExpansionPanel>)
-                      })}
-
+                                </Grid>
+                              </Grid>
+                              </ExpansionPanelDetails>
+                            </ExpansionPanel>)
+                          })}
                   </div>
                 </div>;
     } else {
