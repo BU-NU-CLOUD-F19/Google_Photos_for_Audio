@@ -105,7 +105,8 @@ class Profile extends Component {
     super(props);
     this.state = {isLoggedIn: false,
                   files : [],
-                  filteredFiles : []
+                  filteredFiles : [],
+                  selectedMenuItem : 'keyword'
                 };
   }
 
@@ -117,71 +118,116 @@ class Profile extends Component {
   }
 
   filterSearchFiles = (e) => {
-    let keywords = e.target.value.toLowerCase();
-    var keyArray = keywords.split(' ');
-    let loginState = this.state.isLoggedIn;
-    let allFiles = this.state.files;
-    let allFilterFiles = []
-    for (let n = 0; n < keyArray.length; n++) {
-    // first layer, go through given key words
-      let keyword = keyArray[n];
+    let parameter = this.state.selectedMenuItem;
+    console.log(parameter)
+    if (parameter == 'filename') {
+      let AudioName = e.target.value.toLowerCase();
       let filterFiles = [];
-      for (let i = 0; i < allFiles.length; i++) {
-      // second layer, go through files
-        let keywordInFile = false;
-        let currentFile = allFiles[i];
-        for (let j = 0; j < currentFile['key_words'].length; j++) {
-        // third  layer, go through key words in dynamoDB
-          let lowerString = currentFile['key_words'][j].toLowerCase();
-          // if not the last keyword, given keywords have to match
-          if (n!==keyArray.length-1){
-            if (lowerString===keyword) {
-              keywordInFile = true;
-              break;
-            }
-          }
-          // if is the last keyword, given keyword has to involved
-          else{
-            if (lowerString.includes(keyword)) {
-              keywordInFile = true;
-              break;
-            }
-          }
-        }
+      let loginState = this.state.isLoggedIn;
+      let allFiles = this.state.files;
 
-        if (keywordInFile) {
+      for (let i = 0; i < allFiles.length; i++) {
+        let filenameInFile = false;
+        let currentFile = allFiles[i];
+        let lowerString = currentFile['file_name'].toLowerCase();
+        if (lowerString.includes(AudioName)) {
+          filenameInFile = true;
+        }
+        if (filenameInFile) {
           filterFiles.push(currentFile);
         }
       }
-      if (n===0){
-        allFilterFiles = filterFiles;
-      }
-      if (filterFiles.length === 0){
-        allFilterFiles = [];
-        break;
-      }
-      else{
-      // find the intersection of two list
-        allFilterFiles = allFilterFiles.filter(v => filterFiles.includes(v))
-      }
-    }
 
-    this.setState({isLoggedIn: loginState,
-                   files: allFiles,
-                   filteredFiles: allFilterFiles});
+      this.setState({isLoggedIn: loginState,
+                     files: allFiles,
+                     filteredFiles: filterFiles,
+                     selectedMenuItem:parameter
+                    });
+    }
+    else{
+      let keywords = e.target.value.toLowerCase();
+      var keyArray = keywords.split(' ');
+      let loginState = this.state.isLoggedIn;
+      let allFiles = this.state.files;
+      let allFilterFiles = []
+      for (let n = 0; n < keyArray.length; n++) {
+      // first layer, go through given key words
+        let keyword = keyArray[n];
+        let filterFiles = [];
+        for (let i = 0; i < allFiles.length; i++) {
+        // second layer, go through files
+          let keywordInFile = false;
+          let currentFile = allFiles[i];
+          for (let j = 0; j < currentFile['key_words'].length; j++) {
+          // third  layer, go through key words in dynamoDB
+            let lowerString = currentFile['key_words'][j];
+            // if not the last keyword, given keywords have to match
+            if (n!=keyArray.length-1){
+              if (lowerString==keyword) {
+                keywordInFile = true;
+                break;
+              }
+            }
+            // if is the last keyword, given keyword has to involved
+            else{
+              if (lowerString.includes(keyword)) {
+                keywordInFile = true;
+                break;
+              }
+            }
+          }
+
+          if (keywordInFile) {
+            filterFiles.push(currentFile);
+          }
+        }
+        if (n==0){
+          allFilterFiles = filterFiles;
+        }
+        if (filterFiles==[]){
+          allFilterFiles = [];
+          break;
+        }
+        else{
+        // find the intersection of two list
+          allFilterFiles = allFilterFiles.filter(v => filterFiles.includes(v))
+        }
+      }
+
+      this.setState({isLoggedIn: loginState,
+                     files: allFiles,
+                     filteredFiles: allFilterFiles,
+                     selectedMenuItem:parameter});
+    }
   }
+
+selectedMenu = (e) => {
+  let loginState = this.state.isLoggedIn;
+  let allFiles = this.state.files;
+  let filterFiles = this.state.filteredFiles;
+  this.setState({
+        isLoggedIn: loginState,
+        files: allFiles,
+        filteredFiles: filterFiles,
+        selectedMenuItem : e.target.value
+    },()=>{
+   console.log(this.state.selectedMenuItem)
+    });
+  this.filterSearchFiles;
+}
 
   PullFiles = async () => {
     let user = this.context;
     let currentComponent = this;
-
+    let MenuItem = this.state.selectedMenuItem;
     return (
     axios.post("http://127.0.0.1:8000/home/", {user_email: user.state.userEmail})
           .then(function (response) {
             if (Array.isArray(response['data'])) {
               currentComponent.setState({isLoggedIn: user.state.isAuthenticated,
                                          files: response['data'],
-                                         filteredFiles: response['data']});
+                                         filteredFiles: response['data'],
+                                         selectedMenuItem: MenuItem});
             }
           })
           .catch(function (error) {
@@ -247,7 +293,7 @@ class Profile extends Component {
 
   async componentDidMount() {
     let user = this.context;
-    this.setState({isLoggedIn: user.state.isAuthenticated, files: [], filteredFiles: []});
+    this.setState({isLoggedIn: user.state.isAuthenticated, files: [], filteredFiles: [],selectedMenuItem:''});
     await this.PullFiles();
   }
 
@@ -299,8 +345,7 @@ class Profile extends Component {
                   >
                     <Grid item xs={8}>
                       <TextField
-                        // inputRef={this.inputSearchValue}
-                        onChange={this.filterSearchFiles}
+                        onChange = {this.filterSearchFiles}
                         className={classes.textField}
                         id="search"
                         label="Search your files"
@@ -311,11 +356,11 @@ class Profile extends Component {
                     </Grid>
                     <Grid item xs={3}>
                       <TextField
-                        // inputRef={this.inputSearchType}
-                        onChange={this.filterSearchFiles}
+                        onChange = {this.selectedMenu}
                         className={classes.textField}
                         select
-                        value=''
+                        defaultValue="keyword"
+                        value={ this.state.selectedItem }
                         id="search-select"
                         label="Search by"
                         fullWidth
