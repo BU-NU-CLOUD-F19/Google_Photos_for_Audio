@@ -50,12 +50,9 @@ This project provides basic functionality of a site like Google Photos but for a
     - transcribes stored audio clips into text
     - extract keywords or major topics of texts
     - store transcribed texts
-    - delete transcription
   - user management
     - create a new user in the system
     - retrieve user details
-    - update a user’s details
-    - delete a user
     
 This project is not a social media platform where uploaded content is shared to users that are subscribed to the publisher. While sharing is a stretch feature, it would be in the form of sharing an item on Google Photos with another user, not posting to a live feed. 
 
@@ -68,7 +65,7 @@ This project is not a social media platform where uploaded content is shared to 
 * Store the analysis result and user data into AWS DaynamoDB, queryable by our website.
 * The site will be run by AWS Lambda, while storing backend code on S3.
 The diagram of whole project's structure is as followed.
-![Image text](https://github.com/BU-NU-CLOUD-F19/Google_Photos_for_Audio/blob/master/project_architecture.png)
+![Image text](https://github.com/BU-NU-CLOUD-F19/Google_Photos_for_Audio/blob/master/final_architecture.png)
 ### Design Implications and Discussion
 * Why we choose AWS not GCP  
 Actually they are pretty similar and brand new for most of us. Both have strong function on cloud and database. After do some research we found that AWS have some more understandable tutorials to followed and perhaps have a larger user group, so we choose AWS instead of GCP.
