@@ -420,7 +420,7 @@ class Profile extends Component {
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>
                                 </Grid>
-                              </Grid>
+                              </Grid>ce
                               </ExpansionPanelDetails>
                             </ExpansionPanel>)
                           })}
