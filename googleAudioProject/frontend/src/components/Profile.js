@@ -465,7 +465,7 @@ selectedMenu = (e) => {
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>
                                 </Grid>
-                              </Grid>ce
+                              </Grid>
                               </ExpansionPanelDetails>
                             </ExpansionPanel>)
                           })}
