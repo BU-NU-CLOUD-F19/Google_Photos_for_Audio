@@ -141,7 +141,7 @@ class Profile extends Component {
       this.setState({isLoggedIn: loginState,
                      files: allFiles,
                      filteredFiles: filterFiles,
-                     selectedMenuItem:parameter
+                     selectedMenuItem: parameter
                     });
     }
     else{
@@ -360,7 +360,7 @@ selectedMenu = (e) => {
                         className={classes.textField}
                         select
                         defaultValue="keyword"
-                        value={ this.state.selectedItem }
+                        value={ this.state.selectedMenuItem }
                         id="search-select"
                         label="Search by"
                         fullWidth
@@ -383,7 +383,7 @@ selectedMenu = (e) => {
                     let isAudio = (fileType === "mp3" || fileType === 'wav' || fileType === 'wmv')
 
                     return (
-                          <ExpansionPanel key={index}>
+                          <ExpansionPanel key={index} defaultExpanded={false}>
                             <ExpansionPanelSummary
                               expandIcon={<ExpandMoreIcon />}
                               aria-controls="panel1a-content"
@@ -442,7 +442,7 @@ selectedMenu = (e) => {
                                   <br />
                                 </Grid>
                                 <Grid>
-                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}}>
+                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}} defaultExpanded={false}>
                                     <ExpansionPanelSummary
                                       aria-controls="panel1a-content"
                                       id="panel1a-header"
@@ -453,7 +453,7 @@ selectedMenu = (e) => {
                                       {file['transcript']}
                                     </ExpansionPanelDetails>
                                   </ExpansionPanel>
-                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}}>
+                                  <ExpansionPanel style={{border: '1px solid rgba(0, 0, 0, .125)', boxShadow: 'none'}} defaultExpanded={false}>
                                     <ExpansionPanelSummary
                                       aria-controls="panel1a-content"
                                       id="panel1a-header"
