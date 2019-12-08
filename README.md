@@ -7,7 +7,7 @@
 http://ec2-18-216-140-66.us-east-2.compute.amazonaws.com:8000/
 
 ## Video Link
-TBA
+https://youtu.be/r3xfmfivV_o
 
 ## Deployment Instructions
 ### 1. Environment Requirements
