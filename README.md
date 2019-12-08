@@ -3,21 +3,37 @@
 ### Team members: Mengting Song, Damani Philip, Benjamin Chan,  Yuncheng Zhu
 ### Mentor: Hung Tran
 
-## 1st Presentation:
-https://docs.google.com/presentation/d/1DKc6HNFBpreAhHW4wiEahErnnkVCoF6U2zxHVuzRsHo/edit#slide=id.p
+## Website (Hosted) Link
+http://ec2-18-216-140-66.us-east-2.compute.amazonaws.com:8000/
 
-## 2nd Presentation:
-https://docs.google.com/presentation/d/1P8sDvwWMZO4az-FHJvorB3qE2Jd7LpmkNERJNCClKQY/edit#slide=id.g63d94f3009_0_208
+## Video Link
+TBA
 
-## 3rd Presentation:
-https://drive.google.com/open?id=1yE0CfFCXOqZv5WyXfxjzHbNH-VXPHeHXS8PJlop5yF4
+## Deployment Instructions
+### 1. Environment Requirements
+- Python 3.6/3.7 - https://www.python.org/downloads/
+- npm and node.js - https://nodejs.org/en/
 
-## 4th Presentation:
-https://drive.google.com/open?id=1a3cdo2YCMtG3T_XwLb2SMhssSBKJUYAHX_Mxex6ZlGk
+### 2. Install AWS Command Line Interface
+- Command: `pip3 install awscli`
 
-## 5th Presentation:
-https://docs.google.com/presentation/d/1CJyLS1ztcfhuZyj4O4VA8dxABf5X6j-lpbPCgsqfw1Q/edit?usp=sharing  
+### 3. Configure AWS CLI
+- Command: `aws configure`  
+- Then enter the AWS account key and ID (offered in our email to professors), default region name is ‘us-east-2’, default output format is none (type nothing).
 
+### 4. Python and Node Modules
+- Install using requirements.txt: type ‘pip3 install -r requirements.txt’ in terminal to install the required python libraries.
+- Install using npm: type ‘npm install’ to install all the required npm libraries.
+
+### 5. Running the Website
+- Add the AWS key info:  
+  - Go to the following path in our project: `Google_Photos_for_Audio/googleAudioProject/frontend/AWS_keys.js`
+  - Add our AWS ID and Key (offered in our email to professors), this is required for Uploading function.
+  - After installation, type `npm run dev` to automatically create/update the main.js file, which must be done before start up the website.
+  - Then type `python/python3 manage.py runserver` , this will start up the website and return a localhost link. Click it and you will head to our website.
+
+Note:
+Right now we support 5 types of files: mp3, mp4, flac, wav, wmv, which are the supported types of Amazon Transcribe.
 
 ## 1. Vision and Goals Of The Project
 Google Photos for Audio/Video will establish a website similar to “Google Photo”. On a high level, users can come to the site to upload their media files; the audio in these files will then be transcribed, allowing users to search for media using words found in their audio/video content.
@@ -126,3 +142,19 @@ User-friendly design of front-end website whch contains functions as below:
 5. Release #5 (due by Week 13): 
 
 Test and stretch feature realization.
+
+## Demo Slides
+### 1st Presentation:
+https://docs.google.com/presentation/d/1DKc6HNFBpreAhHW4wiEahErnnkVCoF6U2zxHVuzRsHo/edit#slide=id.p
+
+### 2nd Presentation:
+https://docs.google.com/presentation/d/1P8sDvwWMZO4az-FHJvorB3qE2Jd7LpmkNERJNCClKQY/edit#slide=id.g63d94f3009_0_208
+
+### 3rd Presentation:
+https://drive.google.com/open?id=1yE0CfFCXOqZv5WyXfxjzHbNH-VXPHeHXS8PJlop5yF4
+
+### 4th Presentation:
+https://drive.google.com/open?id=1a3cdo2YCMtG3T_XwLb2SMhssSBKJUYAHX_Mxex6ZlGk
+
+### 5th Presentation:
+https://docs.google.com/presentation/d/1CJyLS1ztcfhuZyj4O4VA8dxABf5X6j-lpbPCgsqfw1Q/edit?usp=sharing  
