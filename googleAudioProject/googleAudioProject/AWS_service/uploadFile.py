@@ -7,18 +7,18 @@ from boto3.dynamodb.conditions import Key, Attr
 
 def create_uri(bucket_name, file_name):
     return "s3://"+bucket_name + '/' + file_name
-
+    
 def lambda_handler(event, context):
     transcribe = boto3.client('transcribe')
     s3 = boto3.client("s3")
     dynamodb = boto3.resource('dynamodb')
-
+    
     if event:
         file_obj = event["Records"][0]
         bucket_name = str(file_obj["s3"]["bucket"]["name"])
         file_name = str(file_obj["s3"]["object"]["key"])
         user_email = file_name.split('/')[0]
-
+        
         # terminate processing if file already existed
         table = dynamodb.Table('Audio')
         response = table.query(
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
                         'statusCode': 500,
                         'body': json.dumps('Uploading failed. File already existed')
                     }
-
+        
         s3_uri = create_uri(bucket_name, file_name)
         file_type = file_name.split('/')[1].split('.')[1]
         job_name = context.aws_request_id
@@ -48,37 +48,55 @@ def lambda_handler(event, context):
                 break
             print("It's in progress")
             time.sleep(5)
-
+            
         load_url = urlopen(status["TranscriptionJob"]["Transcript"]["TranscriptFileUri"])
         json_text = json.load(load_url)  # dictionary
-
         load_json = json.dumps(json_text)  # json(str) type
-
+        
         # s3.put_object(Bucket = bucket_name, Key = "transcribeFile/{}.json".format(job_name),Body = load_json)
         transcript = json_text["results"]["transcripts"][0]["transcript"]
 
-        # call Comprehend detect entities function to find keywords
-        comprehend = boto3.client('comprehend')
-        comprehend_response = comprehend.detect_entities(
-            Text = transcript,
-            LanguageCode ='en'
-        )
+        # # call Comprehend detect entities function to find keywords
+        # comprehend = boto3.client('comprehend')
+        # comprehend_response = comprehend.detect_entities(
+        #     Text = transcript,
+        #     LanguageCode ='en'
+        # )
 
-        # extract keywords from the transcript and store in a list
+        # # extract keywords from the transcript and store in a list
+        # key_words = []
+        # entities = comprehend_response["Entities"]
+        # for i in entities:
+        #     key_words.append(i["Text"])
+        
+        # get rid of comma and period
+        pure_transcript = transcript.replace(',','')
+        pure_transcript = pure_transcript.replace('.','')
+        pure_transcript = pure_transcript.replace('!','')
+        pure_transcript = pure_transcript.replace("'",'')
+        pure_transcript = pure_transcript.replace("?",'')
+        transcript_list = pure_transcript.lower().split()
         key_words = []
-        entities = comprehend_response["Entities"]
-        for i in entities:
-            key_words.append(i["Text"])
+        prepositions = ['and', 'or', 'not', 'none', 'isnt', 'arent', 'wasnt', 'werent', 'yours', 'ours', 'theirs', 'hers', 'should', 'would', 'could', 'can', 
+        'will', 'shall', 'shouldnt', 'wouldnt', 'couldnt', 'let', 'other', 'others', 'very', 'only', 'as', 'been', 'have', 'has', 'had', 'there', 'here','this',
+        'is','are','you','a','i','an','it','she','he','the','about','about','below','excepting','off','toward','above','beneath','for','on','under','across','beside',
+        'besides','from','onto','underneath','after','between','in','out','until','against','beyond','outside','up','along','but','inside','over','upon','among',
+        'by','past','around','concerning','regarding','with','at','despite','into','since','within','down','like','through','without','before','during','near',
+        'throughout','behind','except','of','to']
+        for i in transcript_list:
+            if i not in prepositions:
+                key_words.append(i)
+        key_words = list(set(key_words))
         
         # put to DynamoDB table
         table = dynamodb.Table('Audio')
-
+        
         response = table.query(
         KeyConditionExpression=Key('email').eq(user_email)
     )
         count = response['Count']
         audio_dic = {'transcript':transcript,'file_name':file_name.split('/')[1],'file_url':s3_uri,'key_words':key_words,}
-
+        
         if count == 0:
             table.put_item(
                 Item={
@@ -94,9 +112,10 @@ def lambda_handler(event, context):
                 UpdateExpression='SET audio_files = :val1',
                 ExpressionAttributeValues={
                 ':val1': audio_list
-                }
-            )
-        return {
+            }
+        )
+        
+    return {
         'statusCode': 200,
         'body': json.dumps('Transcript has been stored into DynamoDB!')
-        }
+    }
