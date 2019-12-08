@@ -1,4 +1,4 @@
-# Google_Photos_for_Audio
+# Google Photos for Audio/Video
 
 ### Team members: Mengting Song, Damani Philip, Benjamin Chan,  Yuncheng Zhu
 ### Mentor: Hung Tran
@@ -33,7 +33,8 @@ TBA
   - Then type `python/python3 manage.py runserver` , this will start up the website and return a localhost link. Click it and you will head to our website.
 
 Note:
-Right now we support 5 types of files: mp3, mp4, flac, wav, wmv, which are the supported types of Amazon Transcribe.
+- Right now we support 5 types of files: mp3, mp4, flac, wav, wmv, which are the supported types of Amazon Transcribe.
+- There may be incompatibilities with Safari, so please use Google Chrome.
 
 ## 1. Vision and Goals Of The Project
 Google Photos for Audio/Video will establish a website similar to “Google Photo”. On a high level, users can come to the site to upload their media files; the audio in these files will then be transcribed, allowing users to search for media using words found in their audio/video content.
